@@ -1,0 +1,18 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: sahoolat_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: sahoolat_user
+      POSTGRES_PASSWORD: sahoolat_pass
+      POSTGRES_DB: sahoolat_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - sahoolat_pgdata:/var/lib/postgresql/data
+
+volumes:
+  sahoolat_pgdata:
