@@ -1,42 +1,36 @@
 # SETUP.md — Dev Environment Runbook
 
-Start services in this order every session. All three must be running before the app works end-to-end.
+Start services in this order every session. All services must be configured before the app works end-to-end.
 
 ---
 
-## 1. PostgreSQL (portable — not a Windows service)
+## 1. Database (Hosted on Neon Lakebase Postgres)
 
-PostgreSQL was installed as a portable binary under `D:\Projects\SAHOOLAT\pgsql\`.
-It is **not** registered as a Windows service, so it must be started manually each session.
+The project database is hosted on **Neon** (serverless PostgreSQL):
+- **Project:** `SAHOOLAT` (`curly-violet-39400232`)
+- **Organization:** `Muhammad Ahmed` (`org-lively-forest-89506850`)
+
+### Connecting via Neon CLI / Agent Skills
+Teammates connect using the official Neon CLI / MCP agent tooling rather than manually sharing raw connection strings:
 
 ```powershell
-# Start (run from any directory)
-D:\Projects\SAHOOLAT\pgsql\bin\pg_ctl.exe `
-  -D D:\Projects\SAHOOLAT\pgdata `
-  -l D:\Projects\SAHOOLAT\pgdata\pg.log `
-  start
+# 1. Install Neon agent skills (once per workspace)
+npx skills add neondatabase/agent-skills -s neon -s neon-postgres -y
 
-# Verify it's accepting connections
-D:\Projects\SAHOOLAT\pgsql\bin\pg_isready.exe -h localhost -p 5432
-# Expected output: localhost:5432 - accepting connections
+# 2. Authenticate to your Neon account
+npx neon@latest auth
 
-# Stop (clean shutdown before sleep/hibernate)
-D:\Projects\SAHOOLAT\pgsql\bin\pg_ctl.exe `
-  -D D:\Projects\SAHOOLAT\pgdata `
-  stop
+# 3. Link workspace to the shared SAHOOLAT project
+npx neon@latest link --project-id curly-violet-39400232 --org-id org-lively-forest-89506850
 ```
 
-**Connection details** (used in `backend/.env`):
-- Host: `localhost`
-- Port: `5432`
-- Database: `sahoolat_db`
-- User: `sahoolat_user`
-- Password: `sahoolat_pass`
-- Superuser: `postgres` (no password — trust auth on localhost)
+> **Note:** Each teammate must be invited to the Neon organization (`org-lively-forest-89506850`) in the Neon Console (**Organization → Members**) by an org admin before their CLI/MCP setup can connect.
 
-**First time only** — migrations must be run once after first DB start:
+### Database Migrations
+Migrations are managed via Alembic using the direct unpooled connection string:
+
 ```powershell
-cd D:\Projects\SAHOOLAT\backend
+cd backend
 .venv\Scripts\alembic.exe upgrade head
 ```
 
@@ -45,7 +39,7 @@ cd D:\Projects\SAHOOLAT\backend
 ## 2. Backend (FastAPI + Uvicorn)
 
 ```powershell
-cd D:\Projects\SAHOOLAT\backend
+cd backend
 .venv\Scripts\uvicorn.exe app.main:app --host 0.0.0.0 --port 8000 --reload
 ```
 
@@ -57,7 +51,7 @@ cd D:\Projects\SAHOOLAT\backend
 ## 3. Frontend (Expo / React Native)
 
 ```powershell
-cd D:\Projects\SAHOOLAT\app
+cd app
 npm start
 ```
 
@@ -72,8 +66,8 @@ npm start
 
 | Symptom | Likely cause | Fix |
 |---|---|---|
-| `verify-otp` returns 500 | PostgreSQL not running | Run the `pg_ctl start` command above |
-| `pg_isready` says "no response" | Port 5432 blocked or `pgdata` path wrong | Check the `-D` path; run `pg_ctl status -D D:\...\pgdata` |
-| Expo QR scan fails | Backend on `localhost`, phone can't reach it | Switch `EXPO_PUBLIC_API_URL` to your LAN IP |
+| Database connection error | Neon CLI not authenticated or not linked | Run `npx neon@latest auth` and link to project `curly-violet-39400232` |
+| Org access denied | User not added to Neon organization | Request org admin to add your email in Neon Console (Organization → Members) |
+| Expo QR scan fails | Backend on `localhost`, phone can't reach it | Switch `EXPO_PUBLIC_API_URL` in `app/.env` to your LAN IP |
 | Alembic error "relation already exists" | Migration already ran | Run `alembic current` to check; don't re-run if at `head` |
-| JWT `INVALID_TOKEN` errors | Backend was restarted with a new `.env`-generated secret | The secret is stable (hardcoded in `.env`) — only happens if `.env` was regenerated |
+| JWT `INVALID_TOKEN` errors | Backend was restarted with a new secret | Keep `JWT_SECRET_KEY` in `backend/.env` stable |

@@ -38,6 +38,7 @@ import json
 from dataclasses import dataclass, field
 from typing import Optional
 
+from sqlalchemy.orm import Session
 from app.models.credit_profile import CreditProfile
 
 
@@ -126,7 +127,11 @@ class ScoreResult:
 
 # ── Core scoring function ─────────────────────────────────────────────────────
 
-def calculate_score(profile: CreditProfile, occupation_type: Optional[str] = None) -> ScoreResult:
+def calculate_score(
+    profile: CreditProfile,
+    occupation_type: Optional[str] = None,
+    db: Optional[Session] = None,
+) -> ScoreResult:
     """
     Calculate a credit score from a CreditProfile.
 
@@ -138,6 +143,7 @@ def calculate_score(profile: CreditProfile, occupation_type: Optional[str] = Non
         profile:         The CreditProfile ORM object.
         occupation_type: From UserProfile.occupation_type. Used to decide whether
                          to apply farmer weights. Pass as string value (e.g. 'farmer').
+        db:              Optional SQLAlchemy Session. Used to compute real-time signals.
 
     Returns:
         ScoreResult with score (0–100), band, and per-factor breakdown.
@@ -177,7 +183,26 @@ def calculate_score(profile: CreditProfile, occupation_type: Optional[str] = Non
     factor_points["utility"] = round(util_ratio * weights["utility"], 2)
 
     # ── Committee / savings participation ─────────────────────────────────────
-    factor_points["committee"] = float(weights["committee"]) if profile.has_committee_participation else 0.0
+    has_active_committee = None
+    on_time_contribution_rate = None
+
+    if db is not None:
+        from app.services.committee_engine import get_committee_score_signal
+        signal = get_committee_score_signal(db, profile.user_id)
+        has_active_committee = signal.get("has_active_committee")
+        on_time_contribution_rate = signal.get("on_time_contribution_rate")
+
+    if has_active_committee is not None:
+        if has_active_committee:
+            # Scale score by their contribution timeliness rate.
+            # If they just joined and have no contributions yet, give full active credit (rate=1.0).
+            rate = on_time_contribution_rate if on_time_contribution_rate is not None else 1.0
+            factor_points["committee"] = round(rate * weights["committee"], 2)
+        else:
+            factor_points["committee"] = 0.0
+    else:
+        # Fall back to self-declared flag from CreditProfile (Phase 2 compatibility)
+        factor_points["committee"] = float(weights["committee"]) if profile.has_committee_participation else 0.0
 
     # ── Prior loan repayment ──────────────────────────────────────────────────
     factor_points["repayment"] = float(weights["repayment"]) if profile.has_prior_loan_repayment else 0.0

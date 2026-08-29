@@ -24,6 +24,7 @@ This file exists so any AI coding tool (or teammate) working on this project mak
 
 **General**
 - Environment variables via `.env` files, never hardcoded secrets/keys, ever — including demo/API keys
+- Database access for the team goes through the shared Neon org (each member authenticates individually via Neon CLI/MCP) rather than a distributed raw connection string.
 - Git: one feature branch per module, descriptive commit messages, no direct commits to `main`
 
 ---

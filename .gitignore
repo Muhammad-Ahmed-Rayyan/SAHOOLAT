@@ -1,4 +1,4 @@
-# ─── Environment Variables (CRITICAL: Never commit secrets) ─────────────────
+# ─── Environment Variables ─────────────────
 .env
 .env.*
 !.env.example
@@ -41,6 +41,7 @@ share/python-wheels/
 .pytest_cache/
 .coverage
 htmlcov/
+smoke_test*.py
 
 # ─── Virtual Environments ──────────────────────────────────────────────────
 .venv/
@@ -52,6 +53,7 @@ env/
 pgdata/
 pgsql/
 *.log
+*.zip
 
 # ─── OS & IDEs ──────────────────────────────────────────────────────────────
 .DS_Store
@@ -60,3 +62,4 @@ Thumbs.db
 .vscode/
 *.swp
 *.swo
+.neon

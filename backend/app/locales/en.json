@@ -14,5 +14,17 @@
     "validation": "Please check your input and try again.",
     "server": "Something went wrong. Please try again.",
     "not_found": "The requested resource was not found."
+  },
+  "committee": {
+    "created": "Committee created successfully",
+    "joined": "Joined committee successfully",
+    "activated": "Committee activated successfully",
+    "contribution_logged": "Contribution logged successfully",
+    "not_found": "Committee not found",
+    "already_joined": "You have already joined this committee",
+    "limit_reached": "This committee has reached its member limit",
+    "not_forming": "This committee is not forming. Cannot join.",
+    "not_active": "This committee is not active.",
+    "already_contributed": "You have already contributed for this cycle"
   }
 }

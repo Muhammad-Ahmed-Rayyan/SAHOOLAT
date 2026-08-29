@@ -27,8 +27,15 @@ settings = get_settings()
 # Alembic Config object — access to alembic.ini values
 config = context.config
 
-# Override sqlalchemy.url with value from .env
-config.set_main_option("sqlalchemy.url", settings.DATABASE_URL)
+# Per neon-postgres skill: use the direct (unpooled) URL for migrations.
+# Pooled connections (PgBouncer transaction mode) don't support session-level
+# operations required by schema migrations. Fall back to DATABASE_URL if
+# DATABASE_URL_UNPOOLED is not set (local dev without Neon).
+# NOTE: settings reads from .env via pydantic-settings — do NOT use os.getenv()
+# here, as that only reads OS environment variables, not the .env file.
+migration_url = settings.DATABASE_URL_UNPOOLED or settings.DATABASE_URL
+config.set_main_option("sqlalchemy.url", migration_url)
+
 
 # Set up Python logging from alembic.ini [loggers] section
 if config.config_file_name is not None:

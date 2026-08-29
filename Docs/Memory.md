@@ -103,17 +103,13 @@
 | 2026-08-26 | PlaceholderScreen used for all 8 stub module routes | Avoids 8 near-identical files; each stub just re-exports PlaceholderScreen. Replaced in-place as each phase is completed (CreditScore replaced in Phase 2). |
 | 2026-08-29 | Portable PostgreSQL 16 installed in `D:\Projects\SAHOOLAT\pgsql` | Native Windows service was unavailable; portable binary with `pg_ctl` used instead. Fully documented in `SETUP.md`. |
 | 2026-08-29 | Non-farmer scoring weight redistribution | Farmers are scored on land (20) and crop (15); for non-farmers (shopkeeper, daily laborer, other), land/crop weights are dynamically shifted to utility (35), committee (30), repayment (25), and savings (10) so they can still reach a 100 score. |
-| 2026-08-29 | `CreditScoreHistory` immutable snapshot pattern | Score calculations append to history with factor breakdown serialized as JSON rather than updating in-place, allowing graph visualization of score improvements over time. |
+| 2026-08-29 | `CreditScoreHistory` immutable snapshot pattern | Score calculations append to history with factor breakdown serialized as JSON rather than updating in-place, allowing graph visualization of score improvements over time. || 2026-08-29 | Switched database to hosted Neon Lakebase Postgres | Replaced the local portable Postgres attempt entirely with hosted Neon (project `SAHOOLAT`, org `Muhammad Ahmed`) managed via official Neon CLI / MCP agent tooling. Pooled URL used for app runtime, direct unpooled URL for Alembic migrations. |
 
 ---
 
 ## Known Blockers / Open Questions
 
-- **PostgreSQL startup required each session** — PostgreSQL is portable (not a Windows service). Run before starting the backend:
-  ```powershell
-  D:\Projects\SAHOOLAT\pgsql\bin\pg_ctl.exe -D D:\Projects\SAHOOLAT\pgdata -l D:\Projects\SAHOOLAT\pgdata\pg.log start
-  ```
-  To stop: replace `start` with `stop`. Documented in `SETUP.md`.
+- **Neon Org Access** — Teammates need to be invited to the Neon org (`org-lively-forest-89506850`) before their local Neon CLI/MCP setup can connect.
 - **Urdu fonts (NotoNastaliqUrdu, NotoSansArabic)** need to be downloaded as .ttf files and added to `app/assets/fonts/`. Currently commented out in App.tsx. Phase 1 & 2 render in system Urdu font on device — acceptable now, needed before Phase 10 polish.
 - **Frontend Expo Go** not yet tested on a physical device/simulator — TypeScript compiles clean (exit 0) and API is live; device test pending.
 
@@ -124,5 +120,7 @@
 | Date | What was done | Next step |
 |---|---|---|
 | 2026-08-26 | Phase 1 written: full backend + frontend scaffolded. TypeScript exit 0. OTP in-memory logic verified. DB-dependent endpoints not yet tested (no Postgres). | Get Postgres running |
-| 2026-08-29 | Phase 1 VERIFIED end-to-end with live PostgreSQL 16 (portable install at `D:\Projects\SAHOOLAT\pgsql`). All 8 API tests passed with real DB I/O: send-otp ✅ verify-otp ✅ /auth/me ✅ PUT /onboarding/profile ✅ /auth/me with saved profile ✅ wrong OTP → OTP_INVALID ✅ bad JWT → INVALID_TOKEN ✅ DB row confirmed via psql SELECT. `alembic upgrade head` applied migration 001 cleanly. `SETUP.md` created. | Start Phase 2: Credit Scoring Engine |
-| 2026-08-29 | Phase 2 COMPLETE & VERIFIED: `CreditProfile` + `CreditScoreHistory` models + Alembic migration 002 applied; explainable scoring engine in `services/scoring_engine.py` (farmer & non-farmer dynamic weights); 5 credit API routes in `api/v1/credit_score.py`; frontend `creditService.ts`, `CreditInputScreen.tsx`, `CreditScoreScreen.tsx` with factor progress bars and score history graph; EN & UR locale files updated; TypeScript exit 0; 10/10 automated live API tests passed with real PostgreSQL I/O. | Start Phase 3: Digital Committee (await explicit go-ahead) |
+| 2026-08-29 | Phase 1 VERIFIED end-to-end with live PostgreSQL. All 8 API tests passed with real DB I/O: send-otp ✅ verify-otp ✅ /auth/me ✅ PUT /onboarding/profile ✅ /auth/me with saved profile ✅ wrong OTP → OTP_INVALID ✅ bad JWT → INVALID_TOKEN ✅. `alembic upgrade head` applied migration 001 cleanly. `SETUP.md` created. | Start Phase 2: Credit Scoring Engine |
+| 2026-08-29 | Phase 2 COMPLETE & VERIFIED: `CreditProfile` + `CreditScoreHistory` models + Alembic migration 002 applied; explainable scoring engine in `services/scoring_engine.py` (farmer & non-farmer dynamic weights); 5 credit API routes in `api/v1/credit_score.py`; frontend `creditService.ts`, `CreditInputScreen.tsx`, `CreditScoreScreen.tsx` with factor progress bars and score history graph; EN & UR locale files updated; TypeScript exit 0; 10/10 automated live API tests passed. | Switch to Neon & implement Phase 3 |
+| 2026-08-29 | Switched to hosted Neon Lakebase Postgres (project `SAHOOLAT`, org `Muhammad Ahmed`) via official Neon MCP/CLI agent skills. Configured pooled and unpooled connections. Applied migrations 001, 002, 003 cleanly. Tested Phase 1, 2, and 3 committee backend. | Complete Phase 3 Frontend Screens |
+

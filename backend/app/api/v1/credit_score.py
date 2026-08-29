@@ -230,7 +230,7 @@ def calculate_credit_score(
         else None
     )
 
-    result = calculate_score(cp, occupation_type=occupation)
+    result = calculate_score(cp, occupation_type=occupation, db=db)
 
     history_row = CreditScoreHistory(
         credit_profile_id=cp.id,

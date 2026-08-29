@@ -1,6 +1,8 @@
+from typing import Optional
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from pydantic import field_validator
 from functools import lru_cache
+
 
 
 class Settings(BaseSettings):
@@ -30,8 +32,11 @@ class Settings(BaseSettings):
             [o.strip() for o in self.ALLOWED_ORIGINS_STR.split(",") if o.strip()],
         )
 
-    # ── Database ──────────────────────────────────────────────────────────────
+    # ── Database ──────────────────────────────────────────────────────
     DATABASE_URL: str
+    # Direct (unpooled) URL for Alembic migrations — required on Neon (pooled
+    # connections don’t support session-level ops). Optional for local dev.
+    DATABASE_URL_UNPOOLED: Optional[str] = None
 
     # ── JWT ───────────────────────────────────────────────────────────────────
     JWT_SECRET_KEY: str

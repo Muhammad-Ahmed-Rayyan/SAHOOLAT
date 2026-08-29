@@ -141,7 +141,7 @@ Every module screen is reachable from the Dashboard. The Dashboard itself should
 |---|---|---|
 | Frontend | React Native (Expo) | Cross-platform, works on low-end Android, fast to iterate |
 | Backend | FastAPI (Python) | Fast to build, good fit if scoring/matching logic is Python-based, auto-generates API docs |
-| Database | PostgreSQL | Relational data fits this domain (users, policies, committees, transactions) |
+| Database | PostgreSQL (hosted on Neon, serverless; project `SAHOOLAT` in org `Muhammad Ahmed`) | Shared team DB via Neon MCP, zero local setup, matches eventual Render/Railway deploy target |
 | Auth | Phone number + OTP, JWT sessions | Matches how target users actually identify themselves — not email-based |
 | Weather data | Open-Meteo API | Free, no key required, sufficient for insurance trigger demo |
 | FX data | exchangerate.host (or similar free API) | For remittance context display |
