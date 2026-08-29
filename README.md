@@ -13,18 +13,18 @@
 
 ## 🚦 Project Status
 
-> **Current Phase:** Phase 3 — Digital Committee (ROSCA) (Backend & Database Complete; Frontend in progress)
+- **Phase 1: Foundation + Phone/OTP Auth + Onboarding** — ✅ Complete & Verified
+- **Phase 2: Alternative Credit Scoring Engine** — ✅ Complete & Verified
+- **Phase 3: Digital Committee (ROSCA / BC System)** — ✅ Complete & Verified
+- **Phase 4: Micro-Loan Eligibility Matcher** — ⏳ Planned
+- **Phase 5: Digital Wallet & Auto-Save Rules** — ⏳ Planned
+- **Phase 6: Parametric Crop Insurance (Weather-Triggered)** — ⏳ Planned
+- **Phase 7: Gov Subsidy & Scheme Bot (Kissan Card / BISP)** — ⏳ Planned
+- **Phase 8: Gamified Financial Literacy (Urdu Modules & Quizzes)** — ⏳ Planned
+- **Phase 9: Remittance Tracker & Savings Allocation** — ⏳ Planned
+- **Phase 10: Final Polish & Comprehensive Review** — ⏳ Planned
 
-- **Phase 1: Foundation + Phone/OTP Auth + Onboarding** — ✅ **Complete & Verified**
-- **Phase 2: Alternative Credit Scoring Engine** — ✅ **Complete & Verified**
-- **Phase 3: Digital Committee (ROSCA / BC System)** — 🟡 **Backend & DB Complete (API live, scoring signal integrated); Frontend in progress**
-- **Phase 4: Micro-Loan Eligibility Matcher** — ⏳ *Planned*
-- **Phase 5: Digital Wallet & Auto-Save Rules** — ⏳ *Planned*
-- **Phase 6: Parametric Crop Insurance (Weather-Triggered)** — ⏳ *Planned*
-- **Phase 7: Gov Subsidy & Scheme Bot (Kissan Card / BISP)** — ⏳ *Planned*
-- **Phase 8: Gamified Financial Literacy (Urdu Modules & Quizzes)** — ⏳ *Planned*
-- **Phase 9: Remittance Tracker & Savings Allocation** — ⏳ *Planned*
-- **Phase 10: Final Polish & Comprehensive Review** — ⏳ *Planned*
+**Known open issues (tracked in `Docs/Memory.md`):** language selection not persisting past the auth flow; icons currently placeholder emojis pending a real icon library.
 
 ---
 
@@ -33,8 +33,8 @@
 | Layer | Choice | Why |
 |---|---|---|
 | **Frontend** | React Native (Expo) | Cross-platform, works on low-end Android devices, rapid iteration |
-| **Backend** | FastAPI (Python) | High performance, typed schemas, auto-generated OpenAPI docs, native math/logic support |
-| **Database** | PostgreSQL (Hosted on Neon) | Serverless Lakebase Postgres with instant branch-first workflow and zero local overhead |
+| **Backend** | FastAPI (Python) | High performance, typed schemas, auto-generated OpenAPI docs |
+| **Database** | PostgreSQL (hosted on Neon) | Serverless Postgres, branch-based workflow, no local DB setup needed for the team |
 | **Auth** | Phone Number + OTP, JWT Sessions | Identifies target users by phone number rather than email |
 | **Weather API** | Open-Meteo API | Free, no API key required, reliable for parametric insurance triggers |
 | **FX Rates** | exchangerate.host | Real-time exchange rates for remittance tracking |
@@ -46,43 +46,78 @@
 ## ✨ Features
 
 ### Must-Have Features (Core Foundation & Financial Access)
-- **User Onboarding & Profile** — ✅ *Built* (Phone OTP auth, occupation selection, Urdu/English preference)
-- **Alternative Credit Scoring** — ✅ *Built* (Rule-based, 100% explainable 0–100 score, factor breakdown, score history)
-- **Digital Committee (ROSCA / BC)** — 🟡 *In Progress* (Group lifecycle, dynamic payout order assignment, contribution tracking, live credit score signal integration)
-- **Micro-Loan Eligibility Matcher** — ⏳ *Planned* (Rule-based matching against Akhuwat, Kashf, and NRSP criteria)
+- **User Onboarding & Profile** — ✅ Built (Phone OTP auth, occupation selection, Urdu/English preference)
+- **Alternative Credit Scoring** — ✅ Built (Rule-based, explainable 0–100 score, factor breakdown, score history)
+- **Digital Committee (ROSCA / BC)** — ✅ Built (Group lifecycle, payout order assignment, contribution tracking, live credit score signal integration)
+- **Micro-Loan Eligibility Matcher** — ⏳ Planned (Rule-based matching against Akhuwat, Kashf, and NRSP criteria)
 
 ### Should-Have Features (Personal Finance & Risk Protection)
-- **Digital Wallet** — ⏳ *Planned* (Manual income logging, auto-save toggle, savings visualization)
-- **Parametric Crop Insurance** — ⏳ *Planned* (Open-Meteo weather monitoring with automatic payout triggers)
+- **Digital Wallet** — ⏳ Planned (Manual income logging, auto-save toggle, savings visualization)
+- **Parametric Crop Insurance** — ⏳ Planned (Open-Meteo weather monitoring with automatic payout triggers)
 
 ### Nice-to-Have Features (Literacy & Social Support)
-- **Government Subsidy & Scheme Checker** — ⏳ *Planned* (Kissan Card, BISP / Benazir Kafaalat rule engines)
-- **Gamified Financial Literacy** — ⏳ *Planned* (Bite-sized Urdu lessons, quizzes, badges, streak tracking)
-- **Remittance Tracker** — ⏳ *Planned* (FX insights, remittance logging, savings allocation tips)
+- **Government Subsidy & Scheme Checker** — ⏳ Planned (Kissan Card, BISP / Benazir Kafaalat rule engines)
+- **Gamified Financial Literacy** — ⏳ Planned (Bite-sized Urdu lessons, quizzes, badges, streak tracking)
+- **Remittance Tracker** — ⏳ Planned (FX insights, remittance logging, savings allocation tips)
 
 ---
 
 ## ⚡ Quick Start
 
-```powershell
-# 1. Clone repository
-git clone https://github.com/<your-org>/SAHOOLAT.git; cd SAHOOLAT
+**Windows cmd:**
 
-# 2. Setup backend & database
-cd backend; python -m venv .venv; .venv\Scripts\activate; pip install -r requirements.txt
-alembic upgrade head; uvicorn app.main:app --reload
+```cmd
+git clone https://github.com/Muhammad-Ahmed-Rayyan/SAHOOLAT.git
 
-# 3. Setup frontend (in a separate terminal)
-cd ../app; npm install; npx expo start
+cd SAHOOLAT\backend
+
+python -m venv .venv
+.venv\Scripts\activate
+
+pip install -r requirements.txt
+
+alembic upgrade head
+
+uvicorn app.main:app --reload --host 0.0.0.0
+```
+Frontend (:: in a second terminal):
+```cmd
+cd SAHOOLAT\app
+
+npm install
+
+npx expo start
 ```
 
-👉 **For complete environment configuration, team Neon database onboarding, and troubleshooting, read the full [`SETUP.md`](file:///D:/Project/SAHOOLAT/SETUP.md) runbook.**
+**macOS/Linux:**
+```bash
+git clone https://github.com/Muhammad-Ahmed-Rayyan/SAHOOLAT.git
+
+cd SAHOOLAT/backend && python3 -m venv .venv && source .venv/bin/activate
+
+pip install -r requirements.txt
+
+alembic upgrade head
+
+uvicorn app.main:app --reload --host 0.0.0.0
+
+# in a second terminal
+cd SAHOOLAT/app && npm install && npx expo start
+```
+
+Database is hosted on Neon — no local Postgres install needed, just team access (see SETUP.md). Testing on a physical phone via Expo Go requires setting `EXPO_PUBLIC_API_URL` in `app/.env` to your machine's LAN IP, not `localhost`.
+
+👉 **For full environment configuration, Neon team access, and troubleshooting, see [`SETUP.md`](./SETUP.md).**
 
 ---
 
 ## 📁 Project Structure
 
 - **`backend/`** — FastAPI REST API, SQLAlchemy models, Alembic migrations, rule engines, and localization files.
-- **`app/`** — React Native (Expo) mobile frontend with Urdu-first themes, navigation, state stores, and screens.
-- **`Docs/`** — Architecture, product specifications (PRD), design tokens, coding standards, and living project state tracker (`Memory.md`).
+- **`app/`** — React Native (Expo) mobile frontend with Urdu-first theming, navigation, state stores, and screens.
+- **`Docs/`** — Architecture, product requirements (PRD), design tokens, coding standards, and the living project state tracker (`Memory.md`).
+---
 
+## 📄 License
+
+MIT — see [`LICENSE`](./LICENSE).
