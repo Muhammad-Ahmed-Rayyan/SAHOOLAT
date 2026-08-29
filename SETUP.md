@@ -57,8 +57,11 @@ npm start
 
 - Scan the QR with **Expo Go** on your phone.
 - Or press `a` for Android emulator / `i` for iOS simulator.
-- On a physical device, the backend URL must be your machine's **LAN IP** (not `localhost`):
-  - Edit `app/.env`: `EXPO_PUBLIC_API_URL=http://192.168.X.X:8000/api/v1`
+
+### Testing on a physical device:
+- `EXPO_PUBLIC_API_URL` in `app/.env` must point to the host machine's **LAN IP** (not `localhost`), e.g.:
+  `EXPO_PUBLIC_API_URL=http://192.168.X.X:8000/api/v1`
+- The backend must run with `--host 0.0.0.0` (as shown above) to accept connections from other devices on the local network.
 
 ---
 

@@ -8,3 +8,4 @@ from app.models.committee import (  # noqa: F401
     CommitteeCycle,
     Contribution,
 )
+from app.models.loan_program import MicrofinanceProgram, LoanType  # noqa: F401

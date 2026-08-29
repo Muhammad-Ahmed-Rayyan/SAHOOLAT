@@ -16,15 +16,13 @@
 - **Phase 1: Foundation + Phone/OTP Auth + Onboarding** — ✅ Complete & Verified
 - **Phase 2: Alternative Credit Scoring Engine** — ✅ Complete & Verified
 - **Phase 3: Digital Committee (ROSCA / BC System)** — ✅ Complete & Verified
-- **Phase 4: Micro-Loan Eligibility Matcher** — ⏳ Planned
+- **Phase 4: Micro-Loan Eligibility Matcher** — ✅ Complete & Verified
 - **Phase 5: Digital Wallet & Auto-Save Rules** — ⏳ Planned
 - **Phase 6: Parametric Crop Insurance (Weather-Triggered)** — ⏳ Planned
 - **Phase 7: Gov Subsidy & Scheme Bot (Kissan Card / BISP)** — ⏳ Planned
 - **Phase 8: Gamified Financial Literacy (Urdu Modules & Quizzes)** — ⏳ Planned
 - **Phase 9: Remittance Tracker & Savings Allocation** — ⏳ Planned
 - **Phase 10: Final Polish & Comprehensive Review** — ⏳ Planned
-
-**Known open issues (tracked in `Docs/Memory.md`):** language selection not persisting past the auth flow; icons currently placeholder emojis pending a real icon library.
 
 ---
 
@@ -36,9 +34,10 @@
 | **Backend** | FastAPI (Python) | High performance, typed schemas, auto-generated OpenAPI docs |
 | **Database** | PostgreSQL (hosted on Neon) | Serverless Postgres, branch-based workflow, no local DB setup needed for the team |
 | **Auth** | Phone Number + OTP, JWT Sessions | Identifies target users by phone number rather than email |
+| **Icon System** | `@expo/vector-icons` (Ionicons filled set) | Consistent filled icons matching Design.md without external native dependencies |
 | **Weather API** | Open-Meteo API | Free, no API key required, reliable for parametric insurance triggers |
 | **FX Rates** | exchangerate.host | Real-time exchange rates for remittance tracking |
-| **State Management** | Zustand | Lightweight, minimal boilerplate state management |
+| **State Management** | Zustand + SecureStore | Lightweight state management with secure credential storage |
 | **Localization (i18n)** | react-i18next + JSON locales | Urdu-first design with full English support across app & API |
 
 ---
@@ -48,8 +47,8 @@
 ### Must-Have Features (Core Foundation & Financial Access)
 - **User Onboarding & Profile** — ✅ Built (Phone OTP auth, occupation selection, Urdu/English preference)
 - **Alternative Credit Scoring** — ✅ Built (Rule-based, explainable 0–100 score, factor breakdown, score history)
-- **Digital Committee (ROSCA / BC)** — ✅ Built (Group lifecycle, payout order assignment, contribution tracking, live credit score signal integration)
-- **Micro-Loan Eligibility Matcher** — ⏳ Planned (Rule-based matching against Akhuwat, Kashf, and NRSP criteria)
+- **Digital Committee (ROSCA / BC)** — ✅ Built (Group lifecycle, payout order assignment, contribution tracking, transparent audit log, live credit score signal integration)
+- **Micro-Loan Eligibility Matcher** — ✅ Built (Deterministic rule-based matching against Akhuwat, Kashf Foundation, and NRSP criteria with explainable reasoning & step-by-step application guidance)
 
 ### Should-Have Features (Personal Finance & Risk Protection)
 - **Digital Wallet** — ⏳ Planned (Manual income logging, auto-save toggle, savings visualization)

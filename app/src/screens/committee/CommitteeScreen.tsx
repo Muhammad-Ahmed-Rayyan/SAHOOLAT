@@ -1,2 +1,2 @@
-﻿// Phase 3 — real implementation will replace PlaceholderScreen here.
-export { PlaceholderScreen as default } from '../dashboard/PlaceholderScreen';
+// Phase 3 — Committee module entry point: redirects to the full list screen.
+export { default } from "./CommitteeListScreen";

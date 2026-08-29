@@ -132,5 +132,82 @@
     "notifications": "Notifications",
     "logout": "Log out",
     "logout_confirm": "Are you sure you want to log out?"
+  },
+  "committee": {
+    "title": "My Committees",
+    "subtitle": "Savings groups (BC/ROSCA) you belong to",
+    "create_new": "Create new committee",
+    "members": "members",
+    "you": "You",
+    "joined": "joined",
+    "cycle": "Cycle",
+    "due": "Due",
+    "payout_to": "Payout to",
+    "members_section": "Members & Payout Order",
+    "current_cycle": "Current Cycle",
+    "contribution_log": "Contribution Log",
+    "no_contributions_yet": "No contributions recorded yet.",
+    "forming_note": "{{remaining}} more member(s) needed to activate",
+    "empty_title": "No committees yet",
+    "empty_subtitle": "Create a committee or join one to get started with group savings.",
+    "status": {
+      "forming": "Forming",
+      "active": "Active",
+      "completed": "Completed",
+      "cancelled": "Cancelled"
+    },
+    "frequency": {
+      "weekly": "Weekly",
+      "biweekly": "Bi-weekly",
+      "monthly": "Monthly"
+    },
+    "payout_method": {
+      "fixed_order": "Fixed order",
+      "fixed_order_hint": "Members take turns in a fixed sequence decided at creation.",
+      "lottery": "Lottery",
+      "lottery_hint": "Payout order is randomly assigned when the committee activates."
+    },
+    "create": {
+      "title": "Create a Committee",
+      "subtitle": "You will be the first member and admin of this group.",
+      "name_label": "Committee name",
+      "name_placeholder": "e.g. Ahmed's Family BC",
+      "amount_label": "Contribution per cycle (Rs.)",
+      "amount_placeholder": "e.g. 5000",
+      "limit_label": "Max members",
+      "limit_hint": "Between 2 and 50",
+      "frequency_label": "Contribution frequency",
+      "payout_method_label": "Payout method",
+      "submit": "Create committee",
+      "error_name": "Enter a valid committee name (at least 2 characters).",
+      "error_amount": "Enter a valid contribution amount greater than 0.",
+      "error_limit": "Member limit must be between 2 and 50."
+    },
+    "contribute": {
+      "button": "Contribute Rs. {{amount}}",
+      "confirm_title": "Confirm contribution",
+      "confirm_body": "Submit Rs. {{amount}} for this cycle?",
+      "submit": "Confirm",
+      "already_paid": "You've contributed this cycle"
+    }
+  },
+  "loan_matcher": {
+    "title": "Loan Matches",
+    "subtitle": "Programs you may qualify for based on your credit profile",
+    "no_profile": "Complete your credit profile first to see loan matches.",
+    "go_to_credit": "Go to Credit Score",
+    "empty_title": "No matches found",
+    "empty_subtitle": "No programs matched your current profile. Improve your credit score to qualify for more programs.",
+    "match_card": {
+      "max_loan": "Max loan",
+      "min_score": "Min score required",
+      "occupations": "For",
+      "why_matched": "Why you matched",
+      "why_not": "Why you didn't match",
+      "documents_needed": "Documents needed",
+      "how_to_apply": "How to apply",
+      "apply_label": "Apply / Contact"
+    }
   }
 }
+

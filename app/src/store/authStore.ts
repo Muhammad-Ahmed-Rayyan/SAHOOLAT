@@ -79,20 +79,24 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       console.error("[authStore] Failed to persist access token", e);
       throw e; // Re-throw — failing to save the token is a login failure
     }
-    // Apply the user's persisted language preference if present
-    if (user.profile?.preferred_language) {
-      changeLanguage(user.profile.preferred_language);
-      set({ language: user.profile.preferred_language });
-    }
+    // Bug fix: do NOT override the language the user selected on the LanguageSelectScreen.
+    // The persisted LANG_KEY in SecureStore is the source of truth for language.
+    // Profile.preferred_language is only applied during hydrate() (app restart),
+    // ensuring that selecting English before OTP is never wiped out by the profile's stored 'ur'.
     set({ isAuthenticated: true, accessToken: token, user });
   },
 
   updateUser: (user: AuthUser) => {
     set({ user });
-    // Sync language if profile language changed
+    // Only sync language when user explicitly updates profile — not on initial login.
     if (user.profile?.preferred_language) {
-      changeLanguage(user.profile.preferred_language);
-      set({ language: user.profile.preferred_language });
+      const currentLang = get().language;
+      // Only apply if the profile language matches what's persisted in SecureStore
+      // i.e. the user deliberately changed language during onboarding.
+      if (user.profile.preferred_language !== currentLang) {
+        changeLanguage(user.profile.preferred_language);
+        set({ language: user.profile.preferred_language });
+      }
     }
   },
 
@@ -107,8 +111,8 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
   /**
    * hydrate — called once on app start to restore persisted auth state.
-   * If a token exists in SecureStore, the caller (App.tsx) should then
-   * call GET /auth/me to validate the token and fetch the latest user data.
+   * Language is restored from SecureStore (the LANG_KEY set by setLanguage).
+   * This is the only place where stored profile language should influence i18n.
    */
   hydrate: async () => {
     set({ isHydrating: true });

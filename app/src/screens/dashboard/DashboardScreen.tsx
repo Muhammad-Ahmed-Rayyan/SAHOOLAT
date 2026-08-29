@@ -7,8 +7,8 @@
  * - Shopkeeper → Wallet, Credit Score, Loans prominent
  * - Other/default → all modules equal weight
  *
- * For Phase 1, all module tiles navigate to PlaceholderScreen.
- * They'll be replaced with real screens as phases complete.
+ * Icons: Ionicons filled set from @expo/vector-icons (Design.md: filled/duotone preference).
+ * No emoji placeholders — see theme/icons.ts for the centralized mapping.
  */
 
 import React from "react";
@@ -23,6 +23,7 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useTranslation } from "react-i18next";
+import { Ionicons } from "@expo/vector-icons";
 import { Colors } from "../../theme/colors";
 import {
   FontFamily,
@@ -31,6 +32,7 @@ import {
   MinTapTarget,
   Radius,
 } from "../../theme/typography";
+import { Icons, type IoniconName } from "../../theme/icons";
 import { useAuthStore } from "../../store/authStore";
 import type { RootStackParamList } from "../../navigation/AppNavigator";
 
@@ -40,10 +42,10 @@ interface Module {
   id: string;
   titleKey: string;
   subtitleKey: string;
-  icon: string;
+  icon: IoniconName;
   color: string;
   screen: keyof RootStackParamList;
-  forOccupations?: string[]; // if set, tile is shown prominently for these occupations
+  forOccupations?: string[];
 }
 
 const MODULES: Module[] = [
@@ -51,7 +53,7 @@ const MODULES: Module[] = [
     id: "credit_score",
     titleKey: "dashboard.modules.credit_score",
     subtitleKey: "dashboard.modules.credit_score_sub",
-    icon: "📊",
+    icon: Icons.creditScore,
     color: Colors.primary,
     screen: "CreditScore",
     forOccupations: ["farmer", "shopkeeper"],
@@ -60,7 +62,7 @@ const MODULES: Module[] = [
     id: "committee",
     titleKey: "dashboard.modules.committee",
     subtitleKey: "dashboard.modules.committee_sub",
-    icon: "🤝",
+    icon: Icons.committee,
     color: "#6B7E5A",
     screen: "Committee",
     forOccupations: ["daily_laborer", "farmer"],
@@ -69,7 +71,7 @@ const MODULES: Module[] = [
     id: "loan_matcher",
     titleKey: "dashboard.modules.loan_matcher",
     subtitleKey: "dashboard.modules.loan_matcher_sub",
-    icon: "💼",
+    icon: Icons.loanMatcher,
     color: Colors.primaryLight,
     screen: "LoanMatcher",
     forOccupations: ["farmer", "shopkeeper"],
@@ -78,7 +80,7 @@ const MODULES: Module[] = [
     id: "wallet",
     titleKey: "dashboard.modules.wallet",
     subtitleKey: "dashboard.modules.wallet_sub",
-    icon: "👛",
+    icon: Icons.wallet,
     color: "#8A7E5C",
     screen: "Wallet",
     forOccupations: ["daily_laborer", "shopkeeper"],
@@ -87,7 +89,7 @@ const MODULES: Module[] = [
     id: "insurance",
     titleKey: "dashboard.modules.insurance",
     subtitleKey: "dashboard.modules.insurance_sub",
-    icon: "🌾",
+    icon: Icons.insurance,
     color: "#5C7A5C",
     screen: "Insurance",
     forOccupations: ["farmer"],
@@ -96,7 +98,7 @@ const MODULES: Module[] = [
     id: "subsidy_bot",
     titleKey: "dashboard.modules.subsidy_bot",
     subtitleKey: "dashboard.modules.subsidy_bot_sub",
-    icon: "🏛️",
+    icon: Icons.subsidyBot,
     color: "#7A6E5C",
     screen: "SubsidyBot",
   },
@@ -104,7 +106,7 @@ const MODULES: Module[] = [
     id: "literacy",
     titleKey: "dashboard.modules.literacy",
     subtitleKey: "dashboard.modules.literacy_sub",
-    icon: "📚",
+    icon: Icons.literacy,
     color: "#5C7A8A",
     screen: "Literacy",
   },
@@ -112,7 +114,7 @@ const MODULES: Module[] = [
     id: "remittance",
     titleKey: "dashboard.modules.remittance",
     subtitleKey: "dashboard.modules.remittance_sub",
-    icon: "💸",
+    icon: Icons.remittance,
     color: "#8A6E5C",
     screen: "Remittance",
   },
@@ -174,7 +176,7 @@ export function DashboardScreen() {
           style={styles.logoutButton}
           accessibilityLabel={t("settings.logout")}
         >
-          <Text style={styles.logoutText}>↩</Text>
+          <Ionicons name={Icons.logout} size={22} color={Colors.textSecondary} />
         </TouchableOpacity>
       </View>
 
@@ -196,7 +198,7 @@ export function DashboardScreen() {
             accessibilityRole="button"
           >
             <View style={[styles.tileIconContainer, { backgroundColor: mod.color + "22" }]}>
-              <Text style={styles.tileIcon}>{mod.icon}</Text>
+              <Ionicons name={mod.icon} size={22} color={mod.color} />
             </View>
             <Text style={styles.tileTitle}>{t(mod.titleKey)}</Text>
             <Text style={styles.tileSub}>{t(mod.subtitleKey)}</Text>
@@ -242,10 +244,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  logoutText: {
-    fontSize: 22,
-    color: Colors.textSecondary,
-  },
   grid: {
     flexDirection: "row",
     flexWrap: "wrap",
@@ -270,9 +268,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     marginBottom: 4,
-  },
-  tileIcon: {
-    fontSize: 22,
   },
   tileTitle: {
     fontFamily: FontFamily.headingMedium,

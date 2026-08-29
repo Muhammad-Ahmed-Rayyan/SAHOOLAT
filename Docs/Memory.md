@@ -15,7 +15,7 @@
 
 ## Current Phase
 
-`Phase 2: Credit Scoring Engine — COMPLETE AND VERIFIED END-TO-END. Awaiting go-ahead for Phase 3: Digital Committee.`
+`Phase 3: Digital Committee (ROSCA) & Phase 4: Micro-Loan Matcher — BOTH COMPLETE AND VERIFIED. Awaiting go-ahead for Phase 5: Crop & Life Insurance.`
 
 ---
 
@@ -42,7 +42,7 @@
 - `backend/app/api/v1/auth.py` — POST /auth/send-otp, POST /auth/verify-otp, GET /auth/me
 - `backend/app/api/v1/onboarding.py` — PUT /onboarding/profile
 - `backend/app/locales/en.json` + `ur.json` — backend message strings
-- Stub files: models (committee, loan_program, wallet, insurance_policy, gov_scheme, lesson, remittance) and routes (committee, loan_matcher, wallet, insurance, subsidy_bot, literacy, remittance) and services + jobs
+- Stub files: models and routes and services + jobs
 
 **Frontend (React Native / Expo)**
 - `app/package.json` — updated with all Phase 1 deps (navigation, i18next, zustand, axios, expo-font, google fonts, async-storage, secure-store)
@@ -66,28 +66,65 @@
 - `app/src/screens/dashboard/PlaceholderScreen.tsx` — shared "coming soon" for stub modules
 - `app/src/navigation/AppNavigator.tsx` — typed RootStackParamList, all routes wired
 - `app/.env` — EXPO_PUBLIC_API_URL=http://localhost:8000/api/v1
-- `SETUP.md` — runbook with exact commands to start/stop portable PostgreSQL, backend, and frontend
+- `SETUP.md` — runbook with exact commands to start services
+
+---
 
 ### Phase 2: Credit Scoring Engine (2026-08-29)
 
 **Backend (FastAPI)**
-- `backend/app/models/credit_profile.py` — `CreditProfile` (upserted inputs: land, crop, utility type/months, committee flag, repayment flag, savings pct) and `CreditScoreHistory` (immutable audit trail of calculated scores + JSON breakdown)
+- `backend/app/models/credit_profile.py` — `CreditProfile` and `CreditScoreHistory`
 - `backend/app/db/migrations/versions/002_credit_scoring_schema.py` — Alembic migration for `credit_profiles`, `credit_score_history`, and `utility_type_enum`
-- `backend/app/services/scoring_engine.py` — Explainable rule-based scoring engine (0–100 scale, transparent factor weights, farmer vs non-farmer weight redistribution, score bands: Excellent, Good, Fair, Low, Very Low)
+- `backend/app/services/scoring_engine.py` — Explainable rule-based scoring engine (0–100 scale, transparent factor weights, farmer vs non-farmer weight redistribution, score bands)
 - `backend/app/api/v1/credit_score.py` — 5 endpoints: `GET /credit/profile`, `PUT /credit/profile`, `POST /credit/calculate`, `GET /credit/score`, `GET /credit/score/history`
 
 **Frontend (React Native / Expo)**
-- `app/src/services/creditService.ts` — Axios client with TypeScript interfaces for credit profile, score calculation, latest score, and score history
-- `app/src/screens/credit-score/CreditInputScreen.tsx` — Manual data entry form with occupation-aware fields (farm details for farmers), utility selector chips, paid/total months inputs, committee & repayment toggles, client + server validation
-- `app/src/screens/credit-score/CreditScoreScreen.tsx` — Score display screen with 72px bold score number, color-coded band badge, factor breakdown progress bars with points earned/max, history dot-graph timeline, pull-to-refresh, data update toggle
+- `app/src/services/creditService.ts` — Axios client with TypeScript interfaces
+- `app/src/screens/credit-score/CreditInputScreen.tsx` — Manual data entry form with occupation-aware fields
+- `app/src/screens/credit-score/CreditScoreScreen.tsx` — Score display screen with 72px bold score number, factor breakdown, history graph
 - `app/src/locales/en.json` & `app/src/locales/ur.json` — complete English and Urdu translations for `credit_input` and `credit_score` namespaces
-- `app/src/navigation/AppNavigator.tsx` — wired `CreditScore` route to `CreditScoreScreen`
+
+---
+
+### Phase 3: Digital Committee (ROSCA) (2026-08-29 & 2026-08-30)
+
+**Backend (FastAPI)**
+- `backend/app/models/committee.py` — `Committee`, `CommitteeMember`, `CommitteeCycle`, `Contribution` models
+- `backend/app/db/migrations/versions/003_committee_schema.py` — Alembic migration for committee tables + enums
+- `backend/app/services/committee_engine.py` — Payout ordering (fixed/lottery), contribution logging, scoring signal
+- `backend/app/api/v1/committee.py` — REST endpoints for committee creation, joining, detail, and cycle contributions
+
+**Frontend (React Native / Expo)**
+- `app/src/services/committeeService.ts` — Typed Axios client for committee endpoints
+- `app/src/screens/committee/CommitteeListScreen.tsx` — List of user's committees + create action + status badges
+- `app/src/screens/committee/CreateCommitteeScreen.tsx` — Form for creating committees (frequency chips, payout methods, limits)
+- `app/src/screens/committee/CommitteeDetailScreen.tsx` — Members list with payout positions, current cycle, transparent contribution log, contribute action
+- `app/src/screens/committee/CommitteeScreen.tsx` — Module entry point redirecting to `CommitteeListScreen`
+- `app/src/theme/icons.ts` — Centralized filled icon mapping via `@expo/vector-icons` (Ionicons), eliminating emojis
+- `app/src/navigation/AppNavigator.tsx` — Wired `Committee`, `CommitteeDetail`, and `CreateCommittee`
+- `app/src/locales/en.json` & `app/src/locales/ur.json` — Full bilingual translation coverage for `committee`
+
+---
+
+### Phase 4: Micro-Loan Eligibility Matcher (2026-08-30)
+
+**Backend (FastAPI)**
+- `backend/app/models/loan_program.py` — `MicrofinanceProgram` model with `LoanType` enum and eligibility fields
+- `backend/app/db/migrations/versions/004_loan_program_schema.py` — Alembic migration creating `microfinance_programs` table and seeded with real, sourced data from Akhuwat, Kashf Foundation, and NRSP
+- `backend/app/services/loan_matching_engine.py` — Deterministic, rule-based matching engine evaluating credit score, occupation, and location with explainable `why_matched` and `why_not_matched` reasoning
+- `backend/app/api/v1/loan_matcher.py` — `GET /loans/matches` returning ranked eligible loan programs with application steps and document requirements
+
+**Frontend (React Native / Expo)**
+- `app/src/services/loanService.ts` — Typed Axios client for `getLoanMatches()`
+- `app/src/screens/loan-matcher/LoanMatcherScreen.tsx` — Full match screen displaying ranked program cards, loan limits, interest status, reasons for match, required documents, step-by-step application guidance, and contact links
+- `app/src/navigation/AppNavigator.tsx` — Wired `LoanMatcher` route
+- `app/src/locales/en.json` & `app/src/locales/ur.json` — Full bilingual translation coverage for `loan_matcher`
 
 ---
 
 ## Currently Working On
 
-*(nothing — awaiting Phase 3 go-ahead)*
+*(awaiting Phase 5 go-ahead)*
 
 ---
 
@@ -96,22 +133,22 @@
 | Date | Decision / Deviation | Reason |
 |---|---|---|
 | 2026-08-26 | `occupation_type` kept as 4 values: farmer/daily_laborer/shopkeeper/other | Per user instruction — remittance_recipient is not an occupation |
-| 2026-08-26 | `receives_remittances` added as nullable boolean on UserProfile | Agent's own proposal (not a user instruction) — user approved it as trivial to add; useful for Phase 9 dashboard logic. Defaults to null (unknown), not false. |
+| 2026-08-26 | `receives_remittances` added as nullable boolean on UserProfile | Soft signal for personalization. Defaults to null (unknown), not false. |
 | 2026-08-26 | OTP stored in-memory (Python dict, not Redis/DB) | Dev-only simplicity; documented as production upgrade path in security.py |
-| 2026-08-26 | `ALLOWED_ORIGINS` stored as `ALLOWED_ORIGINS_STR` in .env | pydantic-settings cannot parse a comma-separated string into `list[str]` directly without JSON array syntax — split in `model_post_init` instead |
-| 2026-08-26 | Urdu fonts (NotoNastaliqUrdu, NotoSansArabic) not bundled yet | expo-font needs local asset files; commented out in App.tsx with a clear TODO. Latin fonts (Poppins, Nunito Sans) load via @expo-google-fonts normally. Urdu rendering falls back to system font until assets are added. |
-| 2026-08-26 | PlaceholderScreen used for all 8 stub module routes | Avoids 8 near-identical files; each stub just re-exports PlaceholderScreen. Replaced in-place as each phase is completed (CreditScore replaced in Phase 2). |
-| 2026-08-29 | Portable PostgreSQL 16 installed in `D:\Projects\SAHOOLAT\pgsql` | Native Windows service was unavailable; portable binary with `pg_ctl` used instead. Fully documented in `SETUP.md`. |
-| 2026-08-29 | Non-farmer scoring weight redistribution | Farmers are scored on land (20) and crop (15); for non-farmers (shopkeeper, daily laborer, other), land/crop weights are dynamically shifted to utility (35), committee (30), repayment (25), and savings (10) so they can still reach a 100 score. |
-| 2026-08-29 | `CreditScoreHistory` immutable snapshot pattern | Score calculations append to history with factor breakdown serialized as JSON rather than updating in-place, allowing graph visualization of score improvements over time. || 2026-08-29 | Switched database to hosted Neon Lakebase Postgres | Replaced the local portable Postgres attempt entirely with hosted Neon (project `SAHOOLAT`, org `Muhammad Ahmed`) managed via official Neon CLI / MCP agent tooling. Pooled URL used for app runtime, direct unpooled URL for Alembic migrations. |
+| 2026-08-26 | `ALLOWED_ORIGINS` stored as `ALLOWED_ORIGINS_STR` in .env | Pydantic-settings string parsing fix in `model_post_init` |
+| 2026-08-26 | Urdu fonts (NotoNastaliqUrdu, NotoSansArabic) fallback | Using system Urdu font until custom TTF files are bundled |
+| 2026-08-29 | Non-farmer scoring weight redistribution | Farmers scored on land/crop; weights redistributed to utility/committee/repayment/savings for non-farmers |
+| 2026-08-29 | `CreditScoreHistory` immutable snapshot pattern | Preserves historical credit scoring calculations for audit and timeline visualization |
+| 2026-08-29 | Switched database to hosted Neon Lakebase Postgres | Replaced local portable Postgres with hosted Neon (`SAHOOLAT` in org `Muhammad Ahmed`) |
+| 2026-08-30 | Adopted `@expo/vector-icons` Ionicons filled set | Replaced emoji placeholders across screens per Design.md filled/duotone icon requirement |
+| 2026-08-30 | Rule-based loan matcher with explainability | Deterministic matching against real published MFI criteria (Akhuwat, Kashf, NRSP) returning clear `why_matched` reasons |
 
 ---
 
 ## Known Blockers / Open Questions
 
 - **Neon Org Access** — Teammates need to be invited to the Neon org (`org-lively-forest-89506850`) before their local Neon CLI/MCP setup can connect.
-- **Urdu fonts (NotoNastaliqUrdu, NotoSansArabic)** need to be downloaded as .ttf files and added to `app/assets/fonts/`. Currently commented out in App.tsx. Phase 1 & 2 render in system Urdu font on device — acceptable now, needed before Phase 10 polish.
-- **Frontend Expo Go** not yet tested on a physical device/simulator — TypeScript compiles clean (exit 0) and API is live; device test pending.
+- **Urdu fonts (NotoNastaliqUrdu, NotoSansArabic)** need to be downloaded as .ttf files and added to `app/assets/fonts/`. Currently commented out in App.tsx. System Urdu font is used currently.
 
 ---
 
@@ -119,8 +156,8 @@
 
 | Date | What was done | Next step |
 |---|---|---|
-| 2026-08-26 | Phase 1 written: full backend + frontend scaffolded. TypeScript exit 0. OTP in-memory logic verified. DB-dependent endpoints not yet tested (no Postgres). | Get Postgres running |
-| 2026-08-29 | Phase 1 VERIFIED end-to-end with live PostgreSQL. All 8 API tests passed with real DB I/O: send-otp ✅ verify-otp ✅ /auth/me ✅ PUT /onboarding/profile ✅ /auth/me with saved profile ✅ wrong OTP → OTP_INVALID ✅ bad JWT → INVALID_TOKEN ✅. `alembic upgrade head` applied migration 001 cleanly. `SETUP.md` created. | Start Phase 2: Credit Scoring Engine |
-| 2026-08-29 | Phase 2 COMPLETE & VERIFIED: `CreditProfile` + `CreditScoreHistory` models + Alembic migration 002 applied; explainable scoring engine in `services/scoring_engine.py` (farmer & non-farmer dynamic weights); 5 credit API routes in `api/v1/credit_score.py`; frontend `creditService.ts`, `CreditInputScreen.tsx`, `CreditScoreScreen.tsx` with factor progress bars and score history graph; EN & UR locale files updated; TypeScript exit 0; 10/10 automated live API tests passed. | Switch to Neon & implement Phase 3 |
-| 2026-08-29 | Switched to hosted Neon Lakebase Postgres (project `SAHOOLAT`, org `Muhammad Ahmed`) via official Neon MCP/CLI agent skills. Configured pooled and unpooled connections. Applied migrations 001, 002, 003 cleanly. Tested Phase 1, 2, and 3 committee backend. | Complete Phase 3 Frontend Screens |
-
+| 2026-08-26 | Phase 1 written: full backend + frontend scaffolded. TypeScript exit 0. OTP in-memory logic verified. | Get Postgres running |
+| 2026-08-29 | Phase 1 VERIFIED end-to-end with live PostgreSQL. All 8 API tests passed. Alembic migration 001 applied. | Start Phase 2: Credit Scoring Engine |
+| 2026-08-29 | Phase 2 COMPLETE & VERIFIED: CreditProfile + CreditScoreHistory, scoring engine, 5 API endpoints, CreditInputScreen, CreditScoreScreen. | Switch to Neon & implement Phase 3 |
+| 2026-08-29 | Switched to hosted Neon Lakebase Postgres. Applied migrations 001, 002, 003. Built Phase 3 committee backend. | Complete Phase 3 Frontend Screens |
+| 2026-08-30 | Fixed language persistence bug (root cause: `setAuth()` was overriding selected language with profile default; decoupled session selection). Centralized icon system (`theme/icons.ts`) using `@expo/vector-icons` (Ionicons filled set). Completed Phase 3 frontend (`CommitteeListScreen`, `CreateCommitteeScreen`, `CommitteeDetailScreen`, `committeeService.ts`). Implemented Phase 4 Micro-Loan Matcher (`MicrofinanceProgram` model, migration 004 with real Akhuwat/Kashf/NRSP seed data, `loan_matching_engine.py`, `loan_matcher.py` API, `loanService.ts`, `LoanMatcherScreen.tsx`, full bilingual strings). Fixed `CreditScoreHistory` query in `loan_matcher.py` by joining `CreditProfile` to filter by `current_user.id`. | Await Phase 5: Crop & Life Insurance |

@@ -1,14 +1,15 @@
 /**
  * AppNavigator.tsx — Root navigation configuration for Sahoolat.
  *
- * Stack structure (single flat stack for simplicity in Phase 1):
+ * Stack structure:
  *   Splash → LanguageSelect → PhoneInput → OTPVerify → Onboarding → Dashboard
- *   Dashboard → [module placeholder screens]
+ *   Dashboard → [module screens]
+ *
+ * Committee routes: Committee (list) → CommitteeDetail → CreateCommittee
+ * LoanMatcher → LoanMatcherScreen (Phase 4)
  *
  * Navigation replaces (not pushes) when transitioning between auth and app states
  * so users can't swipe back to the login screen from the dashboard.
- *
- * Phase 2+ will introduce a tab or drawer navigator for the main app area.
  */
 
 import React from "react";
@@ -23,6 +24,10 @@ import { OnboardingScreen } from "../screens/onboarding/OnboardingScreen";
 import { DashboardScreen } from "../screens/dashboard/DashboardScreen";
 import { PlaceholderScreen } from "../screens/dashboard/PlaceholderScreen";
 import CreditScoreScreen from "../screens/credit-score/CreditScoreScreen";
+import CommitteeListScreen from "../screens/committee/CommitteeListScreen";
+import CommitteeDetailScreen from "../screens/committee/CommitteeDetailScreen";
+import CreateCommitteeScreen from "../screens/committee/CreateCommitteeScreen";
+import LoanMatcherScreen from "../screens/loan-matcher/LoanMatcherScreen";
 
 import { Colors } from "../theme/colors";
 import { FontFamily } from "../theme/typography";
@@ -34,10 +39,15 @@ export type RootStackParamList = {
   OTPVerify: { phone: string; devOtp: string | null };
   Onboarding: undefined;
   Dashboard: undefined;
-  // Module placeholder screens — all accept an optional moduleName param
+  // Credit
   CreditScore: { moduleName?: string };
+  // Committee
   Committee: { moduleName?: string };
+  CommitteeDetail: { committeeId: string };
+  CreateCommittee: undefined;
+  // Loan matcher
   LoanMatcher: { moduleName?: string };
+  // Placeholder modules
   Wallet: { moduleName?: string };
   Insurance: { moduleName?: string };
   SubsidyBot: { moduleName?: string };
@@ -100,10 +110,26 @@ export function AppNavigator() {
           options={{ headerShown: false }}
         />
 
-        {/* Module screens */}
+        {/* Credit module */}
         <Stack.Screen name="CreditScore" component={CreditScoreScreen} options={{ title: "" }} />
-        <Stack.Screen name="Committee" component={PlaceholderScreen} options={{ title: "" }} />
-        <Stack.Screen name="LoanMatcher" component={PlaceholderScreen} options={{ title: "" }} />
+
+        {/* Committee module */}
+        <Stack.Screen name="Committee" component={CommitteeListScreen} options={{ title: "" }} />
+        <Stack.Screen
+          name="CommitteeDetail"
+          component={CommitteeDetailScreen}
+          options={{ title: "" }}
+        />
+        <Stack.Screen
+          name="CreateCommittee"
+          component={CreateCommitteeScreen}
+          options={{ title: "" }}
+        />
+
+        {/* Loan matcher (Phase 4) */}
+        <Stack.Screen name="LoanMatcher" component={LoanMatcherScreen} options={{ title: "" }} />
+
+        {/* Placeholder modules */}
         <Stack.Screen name="Wallet" component={PlaceholderScreen} options={{ title: "" }} />
         <Stack.Screen name="Insurance" component={PlaceholderScreen} options={{ title: "" }} />
         <Stack.Screen name="SubsidyBot" component={PlaceholderScreen} options={{ title: "" }} />
