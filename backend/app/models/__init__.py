@@ -9,3 +9,4 @@ from app.models.committee import (  # noqa: F401
     Contribution,
 )
 from app.models.loan_program import MicrofinanceProgram, LoanType  # noqa: F401
+from app.models.wallet import WalletAccount, Transaction, TransactionType  # noqa: F401

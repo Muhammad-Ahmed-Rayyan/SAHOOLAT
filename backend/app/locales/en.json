@@ -26,5 +26,12 @@
     "not_forming": "This committee is not forming. Cannot join.",
     "not_active": "This committee is not active.",
     "already_contributed": "You have already contributed for this cycle"
+  },
+  "wallet": {
+    "income_logged": "Income of Rs. {{amount}} logged successfully.",
+    "auto_save_enabled": "Auto-save set to {{pct}}% of each income entry.",
+    "auto_save_disabled": "Auto-save disabled.",
+    "wallet_not_found": "Wallet not found.",
+    "invalid_amount": "Amount must be greater than zero."
   }
 }

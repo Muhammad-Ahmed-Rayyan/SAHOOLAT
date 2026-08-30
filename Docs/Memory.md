@@ -15,7 +15,7 @@
 
 ## Current Phase
 
-`Phase 3: Digital Committee (ROSCA) & Phase 4: Micro-Loan Matcher — BOTH COMPLETE AND VERIFIED. Awaiting go-ahead for Phase 5: Crop & Life Insurance.`
+`Phase 5: Digital Wallet — COMPLETE. Awaiting go-ahead for Phase 6: Parametric Crop Insurance.`
 
 ---
 
@@ -122,9 +122,28 @@
 
 ---
 
+### Phase 5: Digital Wallet (2026-08-30)
+
+**Backend (FastAPI)**
+- `backend/app/models/wallet.py` — `WalletAccount` (id, user_id FK unique, balance=savings only, auto_save_pct) and `Transaction` (id, wallet_id FK, type enum: income/auto_save/manual_save, amount, note, logged_at) models with UUIDs
+- `backend/app/db/migrations/versions/5a7766b962bd_005_wallet_schema.py` — Alembic migration 005 applied to Neon; creates `wallet_accounts` and `wallet_transactions` tables with `transaction_type_enum`
+- `backend/app/services/wallet_engine.py` — `log_income()` (creates income txn + auto_save txn if pct set, updates balance), `get_savings_trend()` (6-month aggregation), `_update_score_signal()` (writes avg_monthly_savings_pct to CreditProfile after every income log); `CreditProfile.avg_monthly_savings_pct` is now live data, not null
+- `backend/app/api/v1/wallet.py` — 5 routes: `GET /wallet`, `PUT /wallet/auto-save`, `POST /wallet/income` (201), `GET /wallet/transactions` (paginated), `GET /wallet/trend`
+- `backend/app/locales/en.json` & `ur.json` — `wallet` namespace added
+
+**Frontend (React Native / Expo)**
+- `app/src/services/walletService.ts` — Typed Axios client for all 5 wallet endpoints
+- `app/src/screens/wallet/WalletScreen.tsx` — Large Rs. savings balance display (Design.md display typography), auto-save toggle + percentage input (edit-in-place), "Log income" button, 6-month income/savings dot-graph trend (same pattern as CreditScoreScreen), recent transaction list
+- `app/src/screens/wallet/LogIncomeScreen.tsx` — Amount + optional note form, client validation, server error display, alert with auto-save confirmation
+- `app/src/theme/icons.ts` — Added `income` and `savings` icons for wallet screens
+- `app/src/navigation/AppNavigator.tsx` — Wired `Wallet` (real screen) and `LogIncome` routes; added types
+- `app/src/locales/en.json` & `app/src/locales/ur.json` — Full bilingual `wallet` namespace
+
+---
+
 ## Currently Working On
 
-*(awaiting Phase 5 go-ahead)*
+*(awaiting Phase 6 go-ahead: Parametric Crop Insurance)*
 
 ---
 
@@ -142,6 +161,9 @@
 | 2026-08-29 | Switched database to hosted Neon Lakebase Postgres | Replaced local portable Postgres with hosted Neon (`SAHOOLAT` in org `Muhammad Ahmed`) |
 | 2026-08-30 | Adopted `@expo/vector-icons` Ionicons filled set | Replaced emoji placeholders across screens per Design.md filled/duotone icon requirement |
 | 2026-08-30 | Rule-based loan matcher with explainability | Deterministic matching against real published MFI criteria (Akhuwat, Kashf, NRSP) returning clear `why_matched` reasons |
+| 2026-08-30 | Wallet balance = savings only (not gross income) | `WalletAccount.balance` tracks auto_save + manual_save txn totals only. Income is logged as a separate `income` txn type. Matches Phases.md "savings balance" definition. Self-documented in wallet.py module docstring. |
+| 2026-08-30 | Savings score signal updated on every `log_income()` call (not scheduled) | Consistent with committee_engine pattern; score responds to wallet activity immediately. Formula: (total savings / total income over last 90 days) × 100. Existing `savings` factor weight: 5pts farmer / 10pts non-farmer (already allocated in scoring_engine.py Phase 2 — not changed). |
+| 2026-08-30 | Trend chart uses dot-graph pattern from CreditScoreScreen (no new charting lib) | Matches the Phase 5 prompt requirement "reuse that pattern/library rather than introducing a new charting dependency." |
 
 ---
 
@@ -160,4 +182,5 @@
 | 2026-08-29 | Phase 1 VERIFIED end-to-end with live PostgreSQL. All 8 API tests passed. Alembic migration 001 applied. | Start Phase 2: Credit Scoring Engine |
 | 2026-08-29 | Phase 2 COMPLETE & VERIFIED: CreditProfile + CreditScoreHistory, scoring engine, 5 API endpoints, CreditInputScreen, CreditScoreScreen. | Switch to Neon & implement Phase 3 |
 | 2026-08-29 | Switched to hosted Neon Lakebase Postgres. Applied migrations 001, 002, 003. Built Phase 3 committee backend. | Complete Phase 3 Frontend Screens |
-| 2026-08-30 | Fixed language persistence bug (root cause: `setAuth()` was overriding selected language with profile default; decoupled session selection). Centralized icon system (`theme/icons.ts`) using `@expo/vector-icons` (Ionicons filled set). Completed Phase 3 frontend (`CommitteeListScreen`, `CreateCommitteeScreen`, `CommitteeDetailScreen`, `committeeService.ts`). Implemented Phase 4 Micro-Loan Matcher (`MicrofinanceProgram` model, migration 004 with real Akhuwat/Kashf/NRSP seed data, `loan_matching_engine.py`, `loan_matcher.py` API, `loanService.ts`, `LoanMatcherScreen.tsx`, full bilingual strings). Fixed `CreditScoreHistory` query in `loan_matcher.py` by joining `CreditProfile` to filter by `current_user.id`. | Await Phase 5: Crop & Life Insurance |
+| 2026-08-30 | Fixed language persistence bug. Centralized icon system. Completed Phase 3 frontend. Implemented Phase 4 Micro-Loan Matcher (migration 004, engine, API, frontend, bilingual). Fixed CreditScoreHistory query (join via CreditProfile). | Implement Phase 5: Digital Wallet |
+| 2026-08-30 | Phase 5 COMPLETE: WalletAccount + Transaction models, migration 005 applied to Neon, wallet_engine.py (log_income, auto-save, score signal, trend), 5 API routes, walletService.ts, WalletScreen.tsx (balance display, auto-save, trend chart, transactions), LogIncomeScreen.tsx, EN+UR locale strings, icons updated, AppNavigator wired. TypeScript 0 errors, Python 0 errors. | Await Phase 6: Parametric Crop Insurance |

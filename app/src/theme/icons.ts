@@ -61,4 +61,8 @@ export const Icons = {
   document: "document-text" as IoniconName,
   phone: "call" as IoniconName,
   location: "location" as IoniconName,
+
+  // ── Wallet specific ──────────────────────────────────────────────────────────
+  income: "arrow-down-circle" as IoniconName,    // Income log entry
+  savings: "save" as IoniconName,                // Savings summary
 } as const;

@@ -208,6 +208,35 @@
       "how_to_apply": "درخواست کیسے دیں",
       "apply_label": "درخواست / رابطہ"
     }
+  },
+  "wallet": {
+    "title": "میرا والٹ",
+    "subtitle": "اپنی آمدنی اور بچت ٹریک کریں",
+    "balance_label": "بچت بیلنس",
+    "auto_save_label": "خودکار بچت",
+    "auto_save_off": "بند",
+    "auto_save_on": "ہر آمدنی کا {{pct}}%",
+    "auto_save_hint": "فیصد درج کریں (0–100)۔ خالی چھوڑیں تو بند رہے گا۔",
+    "auto_save_set": "خودکار بچت مقرر کریں",
+    "log_income": "آمدنی درج کریں",
+    "transactions_title": "حالیہ لین دین",
+    "no_transactions": "ابھی کوئی لین دین نہیں۔ اپنی آمدنی درج کر کے شروع کریں۔",
+    "trend_title": "ماہانہ رجحان",
+    "trend_income": "آمدنی",
+    "trend_savings": "بچت",
+    "type_income": "آمدنی",
+    "type_auto_save": "خودکار بچت",
+    "type_manual_save": "دستی بچت",
+    "log_income_title": "آمدنی درج کریں",
+    "log_income_subtitle": "وقت کے ساتھ بچت ٹریک کرنے کے لیے اپنی آمدنی ریکارڈ کریں",
+    "amount_label": "رقم (روپے)",
+    "amount_placeholder": "مثلاً 15000",
+    "note_label": "نوٹ (اختیاری)",
+    "note_placeholder": "مثلاً تنخواہ، یومیہ اجرت، فصل کی فروخت",
+    "submit_income": "آمدنی درج کریں",
+    "error_amount": "براہ کرم صفر سے زیادہ درست رقم درج کریں۔",
+    "success_income": "آمدنی درج ہو گئی",
+    "success_with_save": "Rs. {{save}} خودکار بچت میں شامل ہو گئے۔"
   }
 }
 

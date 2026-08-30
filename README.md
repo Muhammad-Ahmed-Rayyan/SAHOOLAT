@@ -17,7 +17,7 @@
 - **Phase 2: Alternative Credit Scoring Engine** — ✅ Complete & Verified
 - **Phase 3: Digital Committee (ROSCA / BC System)** — ✅ Complete & Verified
 - **Phase 4: Micro-Loan Eligibility Matcher** — ✅ Complete & Verified
-- **Phase 5: Digital Wallet & Auto-Save Rules** — ⏳ Planned
+- **Phase 5: Digital Wallet & Auto-Save Rules** — ✅ Complete & Verified
 - **Phase 6: Parametric Crop Insurance (Weather-Triggered)** — ⏳ Planned
 - **Phase 7: Gov Subsidy & Scheme Bot (Kissan Card / BISP)** — ⏳ Planned
 - **Phase 8: Gamified Financial Literacy (Urdu Modules & Quizzes)** — ⏳ Planned
@@ -51,7 +51,7 @@
 - **Micro-Loan Eligibility Matcher** — ✅ Built (Deterministic rule-based matching against Akhuwat, Kashf Foundation, and NRSP criteria with explainable reasoning & step-by-step application guidance)
 
 ### Should-Have Features (Personal Finance & Risk Protection)
-- **Digital Wallet** — ⏳ Planned (Manual income logging, auto-save toggle, savings visualization)
+- **Digital Wallet** — ✅ Built (Manual income logging, percentage-based auto-save, savings balance tracking, 6-month income/savings trend chart, credit score savings signal integration)
 - **Parametric Crop Insurance** — ⏳ Planned (Open-Meteo weather monitoring with automatic payout triggers)
 
 ### Nice-to-Have Features (Literacy & Social Support)

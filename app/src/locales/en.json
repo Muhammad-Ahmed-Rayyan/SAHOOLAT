@@ -208,6 +208,35 @@
       "how_to_apply": "How to apply",
       "apply_label": "Apply / Contact"
     }
+  },
+  "wallet": {
+    "title": "My Wallet",
+    "subtitle": "Track your income and savings",
+    "balance_label": "Savings Balance",
+    "auto_save_label": "Auto-save",
+    "auto_save_off": "Off",
+    "auto_save_on": "{{pct}}% of each income",
+    "auto_save_hint": "Enter a percentage (0–100). Leave blank to disable.",
+    "auto_save_set": "Set auto-save",
+    "log_income": "Log income",
+    "transactions_title": "Recent Transactions",
+    "no_transactions": "No transactions yet. Start by logging your income.",
+    "trend_title": "Monthly Trend",
+    "trend_income": "Income",
+    "trend_savings": "Savings",
+    "type_income": "Income",
+    "type_auto_save": "Auto-save",
+    "type_manual_save": "Manual save",
+    "log_income_title": "Log income",
+    "log_income_subtitle": "Record your earnings to track savings over time",
+    "amount_label": "Amount (Rs.)",
+    "amount_placeholder": "e.g. 15000",
+    "note_label": "Note (optional)",
+    "note_placeholder": "e.g. salary, daily wages, harvest sale",
+    "submit_income": "Log income",
+    "error_amount": "Please enter a valid amount greater than 0.",
+    "success_income": "Income logged",
+    "success_with_save": "Rs. {{save}} auto-saved to your balance."
   }
 }
 

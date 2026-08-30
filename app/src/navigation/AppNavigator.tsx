@@ -28,6 +28,8 @@ import CommitteeListScreen from "../screens/committee/CommitteeListScreen";
 import CommitteeDetailScreen from "../screens/committee/CommitteeDetailScreen";
 import CreateCommitteeScreen from "../screens/committee/CreateCommitteeScreen";
 import LoanMatcherScreen from "../screens/loan-matcher/LoanMatcherScreen";
+import WalletScreen from "../screens/wallet/WalletScreen";
+import LogIncomeScreen from "../screens/wallet/LogIncomeScreen";
 
 import { Colors } from "../theme/colors";
 import { FontFamily } from "../theme/typography";
@@ -47,8 +49,10 @@ export type RootStackParamList = {
   CreateCommittee: undefined;
   // Loan matcher
   LoanMatcher: { moduleName?: string };
-  // Placeholder modules
+  // Wallet (Phase 5)
   Wallet: { moduleName?: string };
+  LogIncome: undefined;
+  // Placeholder modules
   Insurance: { moduleName?: string };
   SubsidyBot: { moduleName?: string };
   Literacy: { moduleName?: string };
@@ -129,8 +133,11 @@ export function AppNavigator() {
         {/* Loan matcher (Phase 4) */}
         <Stack.Screen name="LoanMatcher" component={LoanMatcherScreen} options={{ title: "" }} />
 
+        {/* Wallet (Phase 5) */}
+        <Stack.Screen name="Wallet" component={WalletScreen} options={{ title: "" }} />
+        <Stack.Screen name="LogIncome" component={LogIncomeScreen} options={{ title: "" }} />
+
         {/* Placeholder modules */}
-        <Stack.Screen name="Wallet" component={PlaceholderScreen} options={{ title: "" }} />
         <Stack.Screen name="Insurance" component={PlaceholderScreen} options={{ title: "" }} />
         <Stack.Screen name="SubsidyBot" component={PlaceholderScreen} options={{ title: "" }} />
         <Stack.Screen name="Literacy" component={PlaceholderScreen} options={{ title: "" }} />
