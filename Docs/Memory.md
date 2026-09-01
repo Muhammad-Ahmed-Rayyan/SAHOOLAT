@@ -15,7 +15,7 @@
 
 ## Current Phase
 
-`Phase 5: Digital Wallet — COMPLETE. Awaiting go-ahead for Phase 6: Parametric Crop Insurance.`
+`Phase 9: Remittance Tracker & Savings Allocation — COMPLETE. Ready for Phase 10.`
 
 ---
 
@@ -125,25 +125,101 @@
 ### Phase 5: Digital Wallet (2026-08-30)
 
 **Backend (FastAPI)**
-- `backend/app/models/wallet.py` — `WalletAccount` (id, user_id FK unique, balance=savings only, auto_save_pct) and `Transaction` (id, wallet_id FK, type enum: income/auto_save/manual_save, amount, note, logged_at) models with UUIDs
+- `backend/app/models/wallet.py` — `WalletAccount` and `Transaction` models with UUIDs
 - `backend/app/db/migrations/versions/5a7766b962bd_005_wallet_schema.py` — Alembic migration 005 applied to Neon; creates `wallet_accounts` and `wallet_transactions` tables with `transaction_type_enum`
-- `backend/app/services/wallet_engine.py` — `log_income()` (creates income txn + auto_save txn if pct set, updates balance), `get_savings_trend()` (6-month aggregation), `_update_score_signal()` (writes avg_monthly_savings_pct to CreditProfile after every income log); `CreditProfile.avg_monthly_savings_pct` is now live data, not null
-- `backend/app/api/v1/wallet.py` — 5 routes: `GET /wallet`, `PUT /wallet/auto-save`, `POST /wallet/income` (201), `GET /wallet/transactions` (paginated), `GET /wallet/trend`
+- `backend/app/services/wallet_engine.py` — `log_income()`, `get_savings_trend()`, `_update_score_signal()`
+- `backend/app/api/v1/wallet.py` — 5 routes: `GET /wallet`, `PUT /wallet/auto-save`, `POST /wallet/income` (201), `GET /wallet/transactions`, `GET /wallet/trend`
 - `backend/app/locales/en.json` & `ur.json` — `wallet` namespace added
 
 **Frontend (React Native / Expo)**
 - `app/src/services/walletService.ts` — Typed Axios client for all 5 wallet endpoints
-- `app/src/screens/wallet/WalletScreen.tsx` — Large Rs. savings balance display (Design.md display typography), auto-save toggle + percentage input (edit-in-place), "Log income" button, 6-month income/savings dot-graph trend (same pattern as CreditScoreScreen), recent transaction list
-- `app/src/screens/wallet/LogIncomeScreen.tsx` — Amount + optional note form, client validation, server error display, alert with auto-save confirmation
-- `app/src/theme/icons.ts` — Added `income` and `savings` icons for wallet screens
-- `app/src/navigation/AppNavigator.tsx` — Wired `Wallet` (real screen) and `LogIncome` routes; added types
-- `app/src/locales/en.json` & `app/src/locales/ur.json` — Full bilingual `wallet` namespace
+- `app/src/screens/wallet/WalletScreen.tsx` — Savings balance display, auto-save toggle, 6-month trend graph, transaction list
+- `app/src/screens/wallet/LogIncomeScreen.tsx` — Amount + note form with client & server validation
+- `app/src/theme/icons.ts` — Added `income` and `savings` icons
+- `app/src/navigation/AppNavigator.tsx` — Wired `Wallet` and `LogIncome` routes
+
+---
+
+### Phase 6: Parametric Crop Insurance (2026-09-01)
+
+**Backend (FastAPI)**
+- `backend/app/core/config.py` — Configured Pydantic `extra="ignore"`.
+- `backend/app/models/insurance_policy.py` — `InsurancePolicy`, `WeatherReading`, and `PayoutEvent` models.
+- `backend/app/db/migrations/versions/6a8899b703ef_006_insurance_schema.py` — Alembic migration 006 applied to Neon.
+- `backend/app/services/weather_service.py` — Open-Meteo API fetcher with realistic fallback.
+- `backend/app/services/insurance_trigger_engine.py` — Rule-based weather breach engine with audit logging.
+- `backend/app/jobs/weather_check_job.py` — Daily APScheduler background job.
+- `backend/app/api/v1/insurance.py` — FastApi endpoints for insurance policy management and test simulation.
+
+**Frontend (React Native / Expo)**
+- `app/src/services/insuranceService.ts` — Typed API client.
+- `app/src/screens/insurance/InsuranceScreen.tsx`, `CreatePolicyScreen.tsx`, `PolicyDetailScreen.tsx` — Complete insurance screens.
+- `app/src/theme/icons.ts` & `AppNavigator.tsx` — Icons and routes registered.
+
+---
+
+### Phase 7: Gov Subsidy & Scheme Eligibility Bot (2026-09-01)
+
+**Backend (FastAPI)**
+- Web research & verified cited criteria for Punjab Kissan Card (agripunjab.gov.pk / SMS 8070), BISP Benazir Kafaalat (bisp.gov.pk / SMS 8171), and PM Youth Loan (pmyp.gov.pk).
+- `backend/app/models/gov_scheme.py` — `GovScheme` model with structured JSON criteria, bilingual fields, application steps, SMS codes, and source citations.
+- `backend/app/db/migrations/versions/007_gov_scheme_schema.py` — Alembic migration 007 applied to Neon database; seeded Kissan Card, BISP, and PM Youth Loan.
+- `backend/app/services/subsidy_rule_engine.py` — Deterministic, rule-based evaluation engine returning match scores, passed/failed criteria, and plain-language English & Urdu reasons.
+- `backend/app/api/v1/subsidy_bot.py` — Endpoints: `GET /subsidy-bot/questions`, `POST /subsidy-bot/evaluate`, `GET /subsidy-bot/schemes/{scheme_id}`.
+
+**Frontend (React Native / Expo)**
+- `app/src/services/subsidyBotService.ts` — Typed Axios client for question fetch, eligibility evaluation, and scheme detail.
+- `app/src/screens/subsidy-bot/SubsidyBotScreen.tsx` — Entry screen with intro banner card and active programs list.
+- `app/src/screens/subsidy-bot/QuestionFlowScreen.tsx` — Progressive card question flow (1 question at a time), progress bar, boolean/choice/numeric inputs.
+- `app/src/screens/subsidy-bot/EligibilityResultsScreen.tsx` — Transparent results screen using Design.md trio (`Colors.success`, `Colors.warning`, `Colors.error`), passed/failed breakdown, application steps, SMS codes, and official source citations.
+- `app/src/theme/icons.ts` & `AppNavigator.tsx` — Added filled icons (`govBot`, `scheme`, `citation`, `step`) and wired `SubsidyBot`, `QuestionFlow`, `EligibilityResults` stack routes.
+- `app/src/locales/en.json` & `ur.json` — Complete bilingual translations for `subsidy_bot` namespace.
+
+---
+
+### Phase 8: Gamified Financial Literacy (2026-09-01)
+
+**Backend (FastAPI)**
+- `backend/app/models/lesson.py` — `Lesson`, `Quiz`, `UserProgress`, `Badge`, `UserBadge` models with sequence order, category enum, criteria JSON, and relationship mappings.
+- `backend/app/db/migrations/versions/008_literacy_schema.py` — Alembic migration 008 applied to Neon database; seeded 10 lessons, 10 quizzes, and 7 badges.
+- `backend/app/services/literacy_engine.py` — Deterministic streak calculation engine using UTC `YYYY-MM-DD` strings, quiz scoring, and idempotent badge awarding logic.
+- `backend/app/api/v1/literacy.py` — 7 endpoints: `GET /literacy/lessons`, `GET /literacy/lessons/{id}`, `POST /literacy/lessons/{id}/complete`, `GET /literacy/lessons/{id}/quiz`, `POST /literacy/lessons/{id}/quiz/submit`, `GET /literacy/progress`, `GET /literacy/badges`. All gated by `get_current_user()` and standard error response schema.
+
+**Frontend (React Native / Expo)**
+- `app/src/services/literacyService.ts` — Typed Axios client for all 7 literacy endpoints.
+- `app/src/screens/literacy/LiteracyScreen.tsx` — Progress summary banner (lessons completed, streak pill in `Colors.warning`, badge count), horizontal category filters, sequence-ordered lesson list.
+- `app/src/screens/literacy/LessonScreen.tsx` — Card-chunked interactive reader with card step indicator, progress bar, and completion action.
+- `app/src/screens/literacy/QuizScreen.tsx` — Progressive 1-question-at-a-time quiz flow with choice selection.
+- `app/src/screens/literacy/QuizResultScreen.tsx` — Detailed score breakdown, newly unlocked badges banner, per-question correctness indicator, and explanation cards.
+- `app/src/screens/literacy/BadgesScreen.tsx` — Visual grid showcase of unlocked vs locked badges.
+- `app/src/theme/icons.ts` & `AppNavigator.tsx` — Added Ionicons filled set icons (`streakFire`, `trophy`, `badgeFirstStep`, etc.) and wired stack routes.
+- `app/src/locales/en.json` & `ur.json` — Urdu-first complete bilingual translations for all 10 lessons, cards, quiz questions, choices, explanations, and badges.
+
+---
+
+### Phase 9: Remittance Tracker & Savings Allocation (2026-09-01)
+
+**Backend (FastAPI)**
+- `backend/app/models/remittance.py` — `RemittanceRecord` model tracking origin currency, amount received, snapshot rate, converted PKR, sender relationship, and source country.
+- `backend/app/db/migrations/versions/009_remittance_schema.py` — Alembic migration 009 applied to Neon database.
+- `backend/app/services/fx_service.py` — Async `httpx` FX client fetching live exchange rates for USD, AED, SAR, GBP against PKR with in-memory caching and fallback rate indicator (`is_fallback: True`, "data may be outdated").
+- `backend/app/services/remittance_savings_engine.py` — Rule-based savings allocation engine cross-referencing user's real Wallet auto-save rate (`auto_save_pct`) and active Committee monthly commitments to calculate explainable savings recommendations in English & Urdu.
+- `backend/app/api/v1/remittance.py` — 6 endpoints: `GET /remittance/records`, `POST /remittance/records`, `GET /remittance/records/{id}`, `GET /remittance/trends`, `GET /remittance/savings-suggestion`, `GET /remittance/fx-rates`. All gated by `get_current_user()` and standard error response format.
+
+**Frontend (React Native / Expo)**
+- `app/src/services/remittanceService.ts` — Typed Axios client for all 6 remittance endpoints.
+- `app/src/screens/remittance/RemittanceScreen.tsx` — Hub displaying total received PKR, FX rate ticker with fallback indicator banner, `SavingsSuggestionCard`, and remittance list.
+- `app/src/screens/remittance/LogRemittanceScreen.tsx` — Entry form with currency chips (USD, AED, SAR, GBP), relationship chips, and live PKR conversion preview.
+- `app/src/screens/remittance/RemittanceTrendsScreen.tsx` — Monthly trend chart reusing dot-graph/bar pattern with total & monthly average stats.
+- `app/src/screens/remittance/SavingsSuggestionCard.tsx` — Surfaced card component highlighting recommended savings allocation and plain-language reasoning.
+- `app/src/theme/icons.ts` & `AppNavigator.tsx` — Added filled icons (`send`, `currency`, `globe`, `trendingUp`) and registered `Remittance`, `LogRemittance`, `RemittanceTrends` routes.
+- `app/src/locales/en.json` & `ur.json` — Complete bilingual translations for `remittance` namespace.
 
 ---
 
 ## Currently Working On
 
-*(awaiting Phase 6 go-ahead: Parametric Crop Insurance)*
+*(Completed Phase 9: Remittance Tracker & Savings Allocation. Ready for Phase 10.)*
 
 ---
 
@@ -159,11 +235,17 @@
 | 2026-08-29 | Non-farmer scoring weight redistribution | Farmers scored on land/crop; weights redistributed to utility/committee/repayment/savings for non-farmers |
 | 2026-08-29 | `CreditScoreHistory` immutable snapshot pattern | Preserves historical credit scoring calculations for audit and timeline visualization |
 | 2026-08-29 | Switched database to hosted Neon Lakebase Postgres | Replaced local portable Postgres with hosted Neon (`SAHOOLAT` in org `Muhammad Ahmed`) |
-| 2026-08-30 | Adopted `@expo/vector-icons` Ionicons filled set | Replaced emoji placeholders across screens per Design.md filled/duotone icon requirement |
+| 2026-08-30 | Adopted `@expo/vector-icons` Ionicons filled set | Replaced Lucide icons with `@expo/vector-icons` (Ionicons filled set) because Expo natively bundles `@expo/vector-icons`, ensuring zero external font bundle issues across iOS/Android. |
 | 2026-08-30 | Rule-based loan matcher with explainability | Deterministic matching against real published MFI criteria (Akhuwat, Kashf, NRSP) returning clear `why_matched` reasons |
 | 2026-08-30 | Wallet balance = savings only (not gross income) | `WalletAccount.balance` tracks auto_save + manual_save txn totals only. Income is logged as a separate `income` txn type. Matches Phases.md "savings balance" definition. Self-documented in wallet.py module docstring. |
 | 2026-08-30 | Savings score signal updated on every `log_income()` call (not scheduled) | Consistent with committee_engine pattern; score responds to wallet activity immediately. Formula: (total savings / total income over last 90 days) × 100. Existing `savings` factor weight: 5pts farmer / 10pts non-farmer (already allocated in scoring_engine.py Phase 2 — not changed). |
 | 2026-08-30 | Trend chart uses dot-graph pattern from CreditScoreScreen (no new charting lib) | Matches the Phase 5 prompt requirement "reuse that pattern/library rather than introducing a new charting dependency." |
+| 2026-09-01 | Configured Pydantic `extra="ignore"` | Allows `.env` extra keys (from Neon environment sync) to be safely ignored without breaking `Settings` validation. |
+| 2026-09-01 | Open-Meteo Weather API integration with realistic fallback | Evaluates live weather data for Pakistan districts (Multan, Faisalabad, etc.) while guaranteeing system reliability if external API is unreachable. |
+| 2026-09-01 | Added PM Youth Business & Agri Loan as 3rd seeded scheme | Added PM's Youth Loan beyond the required Kissan Card & BISP scope to provide comprehensive coverage for young entrepreneurs and farmers. |
+| 2026-09-01 | Rule-based subsidy eligibility engine with source citations | Evaluates Kissan Card, BISP, and PM Youth Loans deterministically, citing agripunjab.gov.pk, bisp.gov.pk, and pmyp.gov.pk. |
+| 2026-09-01 | Remittance FX API with fallback & rule-based savings suggestion | Fetches live USD/AED/SAR/GBP to PKR rates with in-memory fallback cache and calculates explainable savings allocations by cross-referencing Wallet `auto_save_pct` and active Committee dues. |
+
 
 ---
 
@@ -184,3 +266,5 @@
 | 2026-08-29 | Switched to hosted Neon Lakebase Postgres. Applied migrations 001, 002, 003. Built Phase 3 committee backend. | Complete Phase 3 Frontend Screens |
 | 2026-08-30 | Fixed language persistence bug. Centralized icon system. Completed Phase 3 frontend. Implemented Phase 4 Micro-Loan Matcher (migration 004, engine, API, frontend, bilingual). Fixed CreditScoreHistory query (join via CreditProfile). | Implement Phase 5: Digital Wallet |
 | 2026-08-30 | Phase 5 COMPLETE: WalletAccount + Transaction models, migration 005 applied to Neon, wallet_engine.py (log_income, auto-save, score signal, trend), 5 API routes, walletService.ts, WalletScreen.tsx (balance display, auto-save, trend chart, transactions), LogIncomeScreen.tsx, EN+UR locale strings, icons updated, AppNavigator wired. TypeScript 0 errors, Python 0 errors. | Await Phase 6: Parametric Crop Insurance |
+| 2026-09-01 | Pydantic startup crash resolved with `extra="ignore"`. Phase 6 Parametric Crop Insurance fully implemented: SQLAlchemy models (`InsurancePolicy`, `WeatherReading`, `PayoutEvent`), Alembic migration `006_insurance_schema` applied to Neon, Open-Meteo `weather_service.py` with fallback, `insurance_trigger_engine.py`, daily APScheduler `weather_check_job.py`, FastApi routes (`/insurance/*`), React Native UI screens (`InsuranceScreen`, `CreatePolicyScreen`, `PolicyDetailScreen`), typed `insuranceService.ts`, full EN+UR bilingual localization, navigation wired. Python imports OK, TypeScript 0 errors. | Ready for Phase 7 |
+| 2026-09-01 | Phase 7 COMPLETE: Web-researched cited criteria for Kissan Card, BISP Kafaalat, and PM Youth Loan. Created `GovScheme` model, Alembic migration `007_gov_scheme_schema` applied to Neon DB. Created `subsidy_rule_engine.py` (rule-based evaluation), FastAPI router `/api/v1/subsidy-bot/*`, typed `subsidyBotService.ts`, RN screens `SubsidyBotScreen.tsx`, `QuestionFlowScreen.tsx`, `EligibilityResultsScreen.tsx`. Design trio colors applied (`Colors.success`, `Colors.warning`, `Colors.error`), EN+UR locale strings updated, filled icons added, AppNavigator wired. TypeScript 0 errors, Python end-to-end tests passed. | Await Phase 8 |

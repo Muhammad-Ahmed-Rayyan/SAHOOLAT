@@ -68,6 +68,24 @@ app.include_router(literacy.router, prefix=API_PREFIX)
 app.include_router(remittance.router, prefix=API_PREFIX)
 
 
+# ── Scheduler Startup ────────────────────────────────────────────────────────
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
+from app.jobs.weather_check_job import run_weather_check_job
+
+scheduler = AsyncIOScheduler()
+
+
+@app.on_event("startup")
+async def startup_event():
+    scheduler.add_job(run_weather_check_job, "interval", hours=24, id="daily_weather_check")
+    scheduler.start()
+
+
+@app.on_event("shutdown")
+async def shutdown_event():
+    scheduler.shutdown()
+
+
 # ── Global exception handler ──────────────────────────────────────────────────
 @app.exception_handler(Exception)
 async def global_exception_handler(request: Request, exc: Exception) -> JSONResponse:

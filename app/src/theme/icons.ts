@@ -65,4 +65,42 @@ export const Icons = {
   // ── Wallet specific ──────────────────────────────────────────────────────────
   income: "arrow-down-circle" as IoniconName,    // Income log entry
   savings: "save" as IoniconName,                // Savings summary
+
+  // ── Insurance specific ───────────────────────────────────────────────────────
+  weather: "partly-sunny" as IoniconName,
+  heat: "flame" as IoniconName,
+  rain: "rainy" as IoniconName,
+  drought: "sunny" as IoniconName,
+  frost: "snow" as IoniconName,
+  shield: "shield-checkmark" as IoniconName,
+  trigger: "alert-circle" as IoniconName,
+
+  // ── Subsidy Bot specific ────────────────────────────────────────────────────
+  govBot: "business" as IoniconName,
+  scheme: "ribbon" as IoniconName,
+  citation: "open" as IoniconName,
+  step: "git-commit" as IoniconName,
+
+  // ── Literacy / Gamification specific ───────────────────────────────────────
+  streakFire: "flame" as IoniconName,
+  trophy: "trophy" as IoniconName,
+  quiz: "help-circle" as IoniconName,
+  badgeFirstStep: "footsteps" as IoniconName,
+  badgeQuickLearner: "flash" as IoniconName,
+  badgeHalfway: "star-half" as IoniconName,
+  badgeMaster: "star" as IoniconName,
+  badgePerfect: "sparkles" as IoniconName,
+  badgeStreak: "flame" as IoniconName,
+  badgeFraud: "shield" as IoniconName,
+  badgeDefault: "ribbon" as IoniconName,
+  lock: "lock-closed" as IoniconName,
+
+  // ── Remittance specific ─────────────────────────────────────────────────────
+  send: "send" as IoniconName,
+  currency: "cash" as IoniconName,
+  globe: "globe" as IoniconName,
+  trendingUp: "trending-up" as IoniconName,
 } as const;
+
+
+

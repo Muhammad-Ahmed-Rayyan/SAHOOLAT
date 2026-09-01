@@ -30,6 +30,21 @@ import CreateCommitteeScreen from "../screens/committee/CreateCommitteeScreen";
 import LoanMatcherScreen from "../screens/loan-matcher/LoanMatcherScreen";
 import WalletScreen from "../screens/wallet/WalletScreen";
 import LogIncomeScreen from "../screens/wallet/LogIncomeScreen";
+import InsuranceScreen from "../screens/insurance/InsuranceScreen";
+import CreatePolicyScreen from "../screens/insurance/CreatePolicyScreen";
+import PolicyDetailScreen from "../screens/insurance/PolicyDetailScreen";
+import SubsidyBotScreen from "../screens/subsidy-bot/SubsidyBotScreen";
+import QuestionFlowScreen from "../screens/subsidy-bot/QuestionFlowScreen";
+import EligibilityResultsScreen from "../screens/subsidy-bot/EligibilityResultsScreen";
+import LiteracyScreen from "../screens/literacy/LiteracyScreen";
+import LessonScreen from "../screens/literacy/LessonScreen";
+import QuizScreen from "../screens/literacy/QuizScreen";
+import QuizResultScreen from "../screens/literacy/QuizResultScreen";
+import BadgesScreen from "../screens/literacy/BadgesScreen";
+import RemittanceScreen from "../screens/remittance/RemittanceScreen";
+import LogRemittanceScreen from "../screens/remittance/LogRemittanceScreen";
+import RemittanceTrendsScreen from "../screens/remittance/RemittanceTrendsScreen";
+import { EvaluateResponse } from "../services/subsidyBotService";
 
 import { Colors } from "../theme/colors";
 import { FontFamily } from "../theme/typography";
@@ -52,12 +67,36 @@ export type RootStackParamList = {
   // Wallet (Phase 5)
   Wallet: { moduleName?: string };
   LogIncome: undefined;
-  // Placeholder modules
-  Insurance: { moduleName?: string };
-  SubsidyBot: { moduleName?: string };
-  Literacy: { moduleName?: string };
-  Remittance: { moduleName?: string };
+  // Insurance (Phase 6)
+  Insurance: { moduleName?: string } | undefined;
+  CreatePolicy: undefined;
+  PolicyDetail: { policyId: string };
+  // Subsidy Bot (Phase 7)
+  SubsidyBot: { moduleName?: string } | undefined;
+  QuestionFlow: undefined;
+  EligibilityResults: { evaluationData: EvaluateResponse };
+  // Financial Literacy (Phase 8)
+  Literacy: { moduleName?: string } | undefined;
+  Lesson: { lessonId: string; localeKey: string };
+  Quiz: { lessonId: string; localeKey: string };
+  QuizResult: {
+    lessonId: string;
+    localeKey: string;
+    score: number;
+    correctCount: number;
+    totalQuestions: number;
+    results: any[];
+    streak: number;
+    newlyAwardedBadges: string[];
+  };
+  Badges: undefined;
+  // Remittance Tracker (Phase 9)
+  Remittance: { moduleName?: string } | undefined;
+  LogRemittance: undefined;
+  RemittanceTrends: undefined;
 };
+
+
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -137,11 +176,27 @@ export function AppNavigator() {
         <Stack.Screen name="Wallet" component={WalletScreen} options={{ title: "" }} />
         <Stack.Screen name="LogIncome" component={LogIncomeScreen} options={{ title: "" }} />
 
-        {/* Placeholder modules */}
-        <Stack.Screen name="Insurance" component={PlaceholderScreen} options={{ title: "" }} />
-        <Stack.Screen name="SubsidyBot" component={PlaceholderScreen} options={{ title: "" }} />
-        <Stack.Screen name="Literacy" component={PlaceholderScreen} options={{ title: "" }} />
-        <Stack.Screen name="Remittance" component={PlaceholderScreen} options={{ title: "" }} />
+        {/* Insurance (Phase 6) */}
+        <Stack.Screen name="Insurance" component={InsuranceScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="CreatePolicy" component={CreatePolicyScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="PolicyDetail" component={PolicyDetailScreen} options={{ headerShown: false }} />
+
+        {/* Subsidy Bot (Phase 7) */}
+        <Stack.Screen name="SubsidyBot" component={SubsidyBotScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="QuestionFlow" component={QuestionFlowScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="EligibilityResults" component={EligibilityResultsScreen} options={{ headerShown: false }} />
+
+        {/* Financial Literacy (Phase 8) */}
+        <Stack.Screen name="Literacy" component={LiteracyScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="Lesson" component={LessonScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="Quiz" component={QuizScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="QuizResult" component={QuizResultScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="Badges" component={BadgesScreen} options={{ headerShown: false }} />
+
+        {/* Remittance Tracker (Phase 9) */}
+        <Stack.Screen name="Remittance" component={RemittanceScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="LogRemittance" component={LogRemittanceScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="RemittanceTrends" component={RemittanceTrendsScreen} options={{ headerShown: false }} />
       </Stack.Navigator>
     </NavigationContainer>
   );

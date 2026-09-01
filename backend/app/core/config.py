@@ -9,6 +9,8 @@ class Settings(BaseSettings):
     # ── App ──────────────────────────────────────────────────────────────────
     APP_ENV: str = "development"
     DEBUG: bool = True
+    ENABLE_DEMO_SIMULATION: bool = True
+
 
     # ALLOWED_ORIGINS is stored as a comma-separated string in .env
     # e.g. ALLOWED_ORIGINS=http://localhost:8081,http://localhost:3000
@@ -50,6 +52,7 @@ class Settings(BaseSettings):
         env_file=".env",
         env_file_encoding="utf-8",
         case_sensitive=True,
+        extra="ignore",
     )
 
 
