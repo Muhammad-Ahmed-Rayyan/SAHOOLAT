@@ -15,7 +15,7 @@
 
 ## Current Phase
 
-`Phase 9: Remittance Tracker & Savings Allocation — COMPLETE. Ready for Phase 10.`
+`Phase 9: Remittance Tracker & Savings Allocation — COMPLETE. Ready for Phase 10: Final Polish & Comprehensive Review.`
 
 ---
 
@@ -219,7 +219,7 @@
 
 ## Currently Working On
 
-*(Completed Phase 9: Remittance Tracker & Savings Allocation. Ready for Phase 10.)*
+*(Completed Phase 9: Remittance Tracker & Savings Allocation. Ready for Phase 10: Final Polish & Comprehensive Review.)*
 
 ---
 
@@ -241,11 +241,14 @@
 | 2026-08-30 | Savings score signal updated on every `log_income()` call (not scheduled) | Consistent with committee_engine pattern; score responds to wallet activity immediately. Formula: (total savings / total income over last 90 days) × 100. Existing `savings` factor weight: 5pts farmer / 10pts non-farmer (already allocated in scoring_engine.py Phase 2 — not changed). |
 | 2026-08-30 | Trend chart uses dot-graph pattern from CreditScoreScreen (no new charting lib) | Matches the Phase 5 prompt requirement "reuse that pattern/library rather than introducing a new charting dependency." |
 | 2026-09-01 | Configured Pydantic `extra="ignore"` | Allows `.env` extra keys (from Neon environment sync) to be safely ignored without breaking `Settings` validation. |
-| 2026-09-01 | Open-Meteo Weather API integration with realistic fallback | Evaluates live weather data for Pakistan districts (Multan, Faisalabad, etc.) while guaranteeing system reliability if external API is unreachable. |
+| 2026-09-01 | APScheduler AsyncIOScheduler for daily weather check job | Selected APScheduler integrated into FastAPI's startup/shutdown lifecycle over one-off background tasks, providing an automatic 24-hour interval trigger while exposing manual trigger (`POST /insurance/check-triggers`) and demo simulation (`POST /insurance/simulate-weather`) endpoints. |
+| 2026-09-01 | Open-Meteo Weather API integration with realistic fallback | Evaluates live weather data for Pakistan districts (Multan, Faisalabad, etc.) with a 5.0s timeout and automatic fallback mock (`is_fallback: true`) guaranteeing system reliability if external API is unreachable. |
 | 2026-09-01 | Added PM Youth Business & Agri Loan as 3rd seeded scheme | Added PM's Youth Loan beyond the required Kissan Card & BISP scope to provide comprehensive coverage for young entrepreneurs and farmers. |
-| 2026-09-01 | Rule-based subsidy eligibility engine with source citations | Evaluates Kissan Card, BISP, and PM Youth Loans deterministically, citing agripunjab.gov.pk, bisp.gov.pk, and pmyp.gov.pk. |
-| 2026-09-01 | Remittance FX API with fallback & rule-based savings suggestion | Fetches live USD/AED/SAR/GBP to PKR rates with in-memory fallback cache and calculates explainable savings allocations by cross-referencing Wallet `auto_save_pct` and active Committee dues. |
-
+| 2026-09-01 | Rule-based subsidy eligibility engine with source citations & unconfirmed criteria marking | Evaluates Kissan Card, BISP, and PM Youth Loans deterministically citing agripunjab.gov.pk, bisp.gov.pk, and pmyp.gov.pk. Marked BISP `max_monthly_income_pkr: 25000` with `TODO: verify — unconfirmed criterion` in migration 007 per Rules.md no-fabricated-data standard. |
+| 2026-09-01 | Literacy curriculum & quizzes seeded directly in Alembic migration 008 | 10 lessons, 10 quizzes, and 7 badges are stored in DB schema via migration 008 using locale keys instead of raw text, ensuring fresh environments have full seed data populated on `alembic upgrade head`. |
+| 2026-09-01 | Deterministic daily streak calculation using UTC date comparison | Streaks evaluate consecutive daily completions using `YYYY-MM-DD` strings in UTC to prevent timezone skew across mobile clients. |
+| 2026-09-01 | Dual-API FX rate service with fallback cache & UI transparency banner | Fetches live USD/AED/SAR/GBP to PKR rates trying primary `open.er-api.com` then secondary `api.exchangerate-api.com`, falling back to static cache `FALLBACK_RATES` and surfacing an "outdated rates" banner if offline. |
+| 2026-09-01 | Explainable remittance savings engine cross-referencing Wallet & Committee | Calculates recommended savings allocations from incoming remittances by dynamically reading the user's real Wallet `auto_save_pct` and active Committee dues. |
 
 ---
 
@@ -253,6 +256,8 @@
 
 - **Neon Org Access** — Teammates need to be invited to the Neon org (`org-lively-forest-89506850`) before their local Neon CLI/MCP setup can connect.
 - **Urdu fonts (NotoNastaliqUrdu, NotoSansArabic)** need to be downloaded as .ttf files and added to `app/assets/fonts/`. Currently commented out in App.tsx. System Urdu font is used currently.
+- **External APIs Status (Verified)** — All external APIs (Open-Meteo for weather, open.er-api.com / exchangerate-api.com for FX rates) operate on free public endpoints requiring no API keys. All services include automated in-memory fallback handlers for offline execution.
+- **BISP Income Threshold Verification** — The Rs. 25,000 monthly income proxy in `007_gov_scheme_schema.py` is tagged `TODO: verify — unconfirmed criterion` until confirmed on official BISP portals (the official primary criterion remains NSER PMT cutoff ≤ 32).
 
 ---
 
@@ -268,3 +273,5 @@
 | 2026-08-30 | Phase 5 COMPLETE: WalletAccount + Transaction models, migration 005 applied to Neon, wallet_engine.py (log_income, auto-save, score signal, trend), 5 API routes, walletService.ts, WalletScreen.tsx (balance display, auto-save, trend chart, transactions), LogIncomeScreen.tsx, EN+UR locale strings, icons updated, AppNavigator wired. TypeScript 0 errors, Python 0 errors. | Await Phase 6: Parametric Crop Insurance |
 | 2026-09-01 | Pydantic startup crash resolved with `extra="ignore"`. Phase 6 Parametric Crop Insurance fully implemented: SQLAlchemy models (`InsurancePolicy`, `WeatherReading`, `PayoutEvent`), Alembic migration `006_insurance_schema` applied to Neon, Open-Meteo `weather_service.py` with fallback, `insurance_trigger_engine.py`, daily APScheduler `weather_check_job.py`, FastApi routes (`/insurance/*`), React Native UI screens (`InsuranceScreen`, `CreatePolicyScreen`, `PolicyDetailScreen`), typed `insuranceService.ts`, full EN+UR bilingual localization, navigation wired. Python imports OK, TypeScript 0 errors. | Ready for Phase 7 |
 | 2026-09-01 | Phase 7 COMPLETE: Web-researched cited criteria for Kissan Card, BISP Kafaalat, and PM Youth Loan. Created `GovScheme` model, Alembic migration `007_gov_scheme_schema` applied to Neon DB. Created `subsidy_rule_engine.py` (rule-based evaluation), FastAPI router `/api/v1/subsidy-bot/*`, typed `subsidyBotService.ts`, RN screens `SubsidyBotScreen.tsx`, `QuestionFlowScreen.tsx`, `EligibilityResultsScreen.tsx`. Design trio colors applied (`Colors.success`, `Colors.warning`, `Colors.error`), EN+UR locale strings updated, filled icons added, AppNavigator wired. TypeScript 0 errors, Python end-to-end tests passed. | Await Phase 8 |
+| 2026-09-01 | Phase 8 COMPLETE: Gamified Financial Literacy implemented. SQLAlchemy models (`Lesson`, `Quiz`, `UserProgress`, `Badge`, `UserBadge`), Alembic migration `008_literacy_schema` applied to Neon seeding 10 lessons, 10 quizzes, and 7 badges. Created `literacy_engine.py` (UTC streak calculation, quiz scoring, badge awarding), FastAPI router `/api/v1/literacy/*` (7 endpoints), typed `literacyService.ts`, RN screens (`LiteracyScreen`, `LessonScreen`, `QuizScreen`, `QuizResultScreen`, `BadgesScreen`). Full bilingual English & Urdu translations, filled icons added, AppNavigator wired. TypeScript 0 errors, Python py_compile 0 errors. | Await Phase 9 |
+| 2026-09-01 | Phase 9 COMPLETE: Remittance Tracker & Savings Allocation implemented. `RemittanceRecord` model, Alembic migration `009_remittance_schema` applied to Neon. Created `fx_service.py` (dual-API live rates for USD/AED/SAR/GBP to PKR with offline cache), `remittance_savings_engine.py` (cross-referencing Wallet `auto_save_pct` and active Committee dues), FastAPI router `/api/v1/remittance/*` (6 endpoints), typed `remittanceService.ts`, RN screens (`RemittanceScreen`, `LogRemittanceScreen`, `RemittanceTrendsScreen`, `SavingsSuggestionCard`). Full bilingual strings, filled icons, AppNavigator wired. TypeScript 0 errors, Python py_compile 0 errors. Docs synchronized across repository. | Await Phase 10: Final Polish & Review |

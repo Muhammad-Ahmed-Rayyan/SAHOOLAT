@@ -18,10 +18,10 @@
 - **Phase 3: Digital Committee (ROSCA / BC System)** — ✅ Complete & Verified
 - **Phase 4: Micro-Loan Eligibility Matcher** — ✅ Complete & Verified
 - **Phase 5: Digital Wallet & Auto-Save Rules** — ✅ Complete & Verified
-- **Phase 6: Parametric Crop Insurance (Weather-Triggered)** — ⏳ Planned
-- **Phase 7: Gov Subsidy & Scheme Bot (Kissan Card / BISP)** — ⏳ Planned
-- **Phase 8: Gamified Financial Literacy (Urdu Modules & Quizzes)** — ⏳ Planned
-- **Phase 9: Remittance Tracker & Savings Allocation** — ⏳ Planned
+- **Phase 6: Parametric Crop Insurance (Weather-Triggered)** — ✅ Complete & Verified
+- **Phase 7: Gov Subsidy & Scheme Bot (Kissan Card / BISP)** — ✅ Complete & Verified
+- **Phase 8: Gamified Financial Literacy (Urdu Modules & Quizzes)** — ✅ Complete & Verified
+- **Phase 9: Remittance Tracker & Savings Allocation** — ✅ Complete & Verified
 - **Phase 10: Final Polish & Comprehensive Review** — ⏳ Planned
 
 ---
@@ -35,7 +35,7 @@
 | **Database** | PostgreSQL (hosted on Neon) | Serverless Postgres, branch-based workflow, no local DB setup needed for the team |
 | **Auth** | Phone Number + OTP, JWT Sessions | Identifies target users by phone number rather than email |
 | **Icon System** | `@expo/vector-icons` (Ionicons filled set) | Consistent filled icons matching Design.md without external native dependencies |
-| **Weather API** | Open-Meteo API | Free, no API key required, reliable for parametric insurance triggers |
+| **Weather API** | Open-Meteo API | Free, no API key required, powers the crop insurance trigger job |
 | **FX Rates** | exchangerate.host | Real-time exchange rates for remittance tracking |
 | **State Management** | Zustand + SecureStore | Lightweight state management with secure credential storage |
 | **Localization (i18n)** | react-i18next + JSON locales | Urdu-first design with full English support across app & API |
@@ -52,12 +52,12 @@
 
 ### Should-Have Features (Personal Finance & Risk Protection)
 - **Digital Wallet** — ✅ Built (Manual income logging, percentage-based auto-save, savings balance tracking, 6-month income/savings trend chart, credit score savings signal integration)
-- **Parametric Crop Insurance** — ⏳ Planned (Open-Meteo weather monitoring with automatic payout triggers)
+- **Parametric Crop Insurance** — ✅ Built (Policy creation tied to crop + district, daily weather-check job against Open-Meteo, automatic simulated payout on threshold breach, visible trigger log)
 
 ### Nice-to-Have Features (Literacy & Social Support)
-- **Government Subsidy & Scheme Checker** — ⏳ Planned (Kissan Card, BISP / Benazir Kafaalat rule engines)
-- **Gamified Financial Literacy** — ⏳ Planned (Bite-sized Urdu lessons, quizzes, badges, streak tracking)
-- **Remittance Tracker** — ⏳ Planned (FX insights, remittance logging, savings allocation tips)
+- **Government Subsidy & Scheme Checker** — ✅ Built (Rule-based eligibility for Kissan Card and BISP/Benazir Kafaalat)
+- **Gamified Financial Literacy** — ✅ Built (Urdu-first lessons, quizzes, badges/streak tracking)
+- **Remittance Tracker** — ✅ Built (Remittance logging, trend view, FX context via exchangerate.host, cross-referenced savings suggestions)
 
 ---
 
@@ -112,9 +112,10 @@ Database is hosted on Neon — no local Postgres install needed, just team acces
 
 ## 📁 Project Structure
 
-- **`backend/`** — FastAPI REST API, SQLAlchemy models, Alembic migrations, rule engines, and localization files.
+- **`backend/`** — FastAPI REST API, SQLAlchemy models, Alembic migrations, rule engines, scheduled jobs (weather checks), and localization files.
 - **`app/`** — React Native (Expo) mobile frontend with Urdu-first theming, navigation, state stores, and screens.
 - **`Docs/`** — Architecture, product requirements (PRD), design tokens, coding standards, and the living project state tracker (`Memory.md`).
+
 ---
 
 ## 📄 License

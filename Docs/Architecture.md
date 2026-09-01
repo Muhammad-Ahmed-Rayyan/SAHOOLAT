@@ -85,9 +85,15 @@ Every module screen is reachable from the Dashboard. The Dashboard itself should
       remittance.py
     /services            # business logic, separated from routes
       scoring_engine.py
+      committee_engine.py
       loan_matching_engine.py
+      wallet_engine.py
+      weather_service.py
       insurance_trigger_engine.py
       subsidy_rule_engine.py
+      literacy_engine.py
+      fx_service.py
+      remittance_savings_engine.py
     /jobs                 # scheduled background tasks
       weather_check_job.py
       committee_reminder_job.py
@@ -127,6 +133,7 @@ Every module screen is reachable from the Dashboard. The Dashboard itself should
     /theme
       colors.ts
       typography.ts
+      icons.ts
     App.tsx
   package.json
 ```
