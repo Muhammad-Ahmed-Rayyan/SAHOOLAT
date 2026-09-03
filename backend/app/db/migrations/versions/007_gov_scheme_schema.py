@@ -160,11 +160,12 @@ def upgrade() -> None:
                 'benefit_summary': 'Tier-1 interest-free loan up to Rs. 500,000 with 0% mark-up rate and easy repayment terms.',
                 'benefit_summary_ur': '500,000 روپے تک 0 فیصد مارک اپ پر آسان اقساط کے ساتھ قرضہ۔',
                 'criteria_json': {
-                    'min_age': 18,                     # Primary: pmyp.gov.pk
-                    'max_age': 45,                     # Primary: pmyp.gov.pk
+                    'min_age_general': 21,              # Primary: pmyp.gov.pk (Standard age limit: 21–45)
+                    'min_age_it_ecommerce': 18,         # Primary: pmyp.gov.pk (Relaxed to 18 for IT/e-commerce)
+                    'max_age': 45,                      # Primary: pmyp.gov.pk
                     'citizenship': 'pakistani',         # Primary: pmyp.gov.pk
-                    'loan_tier_1_max_pkr': 500000,    # Primary: pmyp.gov.pk
-                    'tier_1_interest_rate_pct': 0.0   # Primary: pmyp.gov.pk
+                    'loan_tier_1_max_pkr': 500000,     # Primary: pmyp.gov.pk
+                    'tier_1_interest_rate_pct': 0.0    # Primary: pmyp.gov.pk
                 },
                 'application_steps': [
                     'Visit the official Prime Minister Youth Programme portal (pmyp.gov.pk).',
@@ -178,7 +179,7 @@ def upgrade() -> None:
                 ],
                 'official_portal_url': 'https://pmyp.gov.pk',
                 'sms_service_code': None,
-                'source_citation': 'Primary Source: Prime Minister Youth Programme (pmyp.gov.pk) & State Bank of Pakistan Guidelines (Checked Sep 2026).',
+                'source_citation': 'Primary Source: Prime Minister Youth Programme (pmyp.gov.pk) & State Bank of Pakistan Guidelines (Checked Sep 2026: General 21–45 yrs; IT/E-commerce relaxed to 18–45 yrs).',
                 'is_active': True,
                 'created_at': now,
                 'updated_at': now,

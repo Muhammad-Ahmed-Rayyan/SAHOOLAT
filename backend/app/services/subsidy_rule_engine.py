@@ -198,13 +198,25 @@ def evaluate_scheme_eligibility(
             reason_ur = "نااہل۔ BISP پروگرام صرف کم آمدنی والے خاندانوں کے لیے ہے۔"
 
     else:  # pm_youth_loan
-        # 1. Age check (18 - 45)
-        if 18 <= age <= 45:
-            passed_en.append(f"Age ({age} years) falls within the required 18–45 years eligibility range.")
-            passed_ur.append(f"عمر ({age} سال) 18 سے 45 سال کی حد کے اندر ہے۔")
+        # 1. Age check (Category-conditional: 21–45 standard, 18–45 for IT/e-commerce)
+        business_type = str(answers.get("business_type", answers.get("occupation", ""))).lower()
+        is_it_ecommerce = "it" in business_type or "e-commerce" in business_type or "tech" in business_type or "software" in business_type
+        min_required_age = 18 if is_it_ecommerce else 21
+
+        if min_required_age <= age <= 45:
+            if is_it_ecommerce and 18 <= age < 21:
+                passed_en.append(f"Age ({age} years) meets the relaxed 18–45 years bracket for IT/e-commerce applicants.")
+                passed_ur.append(f"عمر ({age} سال) IT/ای کامرس کے لیے 18 سے 45 سال کی رعایت پر پورا اترتی ہے۔")
+            else:
+                passed_en.append(f"Age ({age} years) falls within the required {min_required_age}–45 years eligibility range.")
+                passed_ur.append(f"عمر ({age} سال) {min_required_age} سے 45 سال کی حد کے اندر ہے۔")
         else:
-            failed_en.append(f"Age ({age} years) is outside the 18–45 years youth eligibility bracket.")
-            failed_ur.append(f"عمر ({age} سال) 18 سے 45 سال کی حد سے باہر ہے۔")
+            if age < 21 and not is_it_ecommerce:
+                failed_en.append(f"Age ({age} years) is below minimum required age (21 years for general applicants; 18 for IT/e-commerce).")
+                failed_ur.append(f"عمر ({age} سال) کم از کم لازمی عمر (عام درخواست دہندگان کے لیے 21 سال) سے کم ہے۔")
+            else:
+                failed_en.append(f"Age ({age} years) is outside the {min_required_age}–45 years youth eligibility bracket.")
+                failed_ur.append(f"عمر ({age} سال) {min_required_age} سے 45 سال کی حد سے باہر ہے۔")
 
         # 2. Bank default check
         if not has_loan_default:

@@ -1,13 +1,14 @@
 """004_loan_program_schema.py — Phase 4: microfinance_programs table + seed data.
 
-Seed data sources (real, published criteria — Rules.md compliance):
+Seed data sources (re-verified Sep 2026 against published primary pages):
   - Akhuwat: https://akhuwat.org.pk/islamic-microfinance/products/
-    Business Loan: 10,000–500,000 PKR; qard hasan (0% interest); CNIC + guarantor required.
+    Business Loan: 10,000–500,000 PKR; qard hasan (0% interest); CNIC + 2 community guarantors required. (Verified Sep 2026)
+    Agri Loan: 10,000–300,000 PKR; qard hasan (0% interest); farm land ownership/lease proof. (Verified Sep 2026)
   - Kashf Foundation: https://www.kashf.org/products
-    Group Enterprise Loan: 15,000–150,000 PKR; 24% per annum declining; women-only.
-    Individual Business Loan: 50,000–1,000,000 PKR; 18–24% per annum.
-  - NRSP (National Rural Support Programme): https://www.nrsp.org.pk/
-    Agriculture Loan: 10,000–300,000 PKR; 18–22% per annum; rural farmers priority.
+    Group Enterprise Loan: 15,000–150,000 PKR; 24% per annum declining; 3-5 women group model. (Verified Sep 2026)
+    Individual Business Loan: 50,000–1,000,000 PKR; 18–24% per annum. (Verified Sep 2026)
+  - NRSP (National Rural Support Programme): https://nrsp.org.pk/microfinance/
+    Agriculture & Small Business Loans: 10,000–300,000 PKR; 18–22% per annum; Community Organisation (CO) membership required. (Verified Sep 2026)
 
 Any values not confirmed from a primary source are marked TODO in code comments.
 
