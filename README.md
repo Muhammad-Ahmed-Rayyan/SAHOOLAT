@@ -1,123 +1,154 @@
-# Sahoolat (سہولت) — AI-Powered Financial Inclusion Platform for Pakistan
+<div align="center">
 
-> A mobile-first financial access and awareness platform that gives unbanked and underbanked Pakistanis — small farmers, daily wage workers, and first-time banking users — access to alternative credit scoring, digitized savings committees, microfinance loan matching, and micro-financial tools through a single, Urdu-first entry point.
+# 🤝 Sahoolat (سہولت)
 
----
+*AI-Powered Financial Inclusion Platform for Pakistan*
 
-## 📌 What This Is & What This Isn't
+![Last Commit](https://img.shields.io/github/last-commit/Muhammad-Ahmed-Rayyan/SAHOOLAT)
+![languages](https://img.shields.io/github/languages/count/Muhammad-Ahmed-Rayyan/SAHOOLAT)
 
-- **What This Is:** A financial access, awareness, and decision-support layer. It builds transparent credit scores from non-traditional data (land size, crop yield, utility bill consistency, committee reliability), digitizes informal savings committees (BC/ROSCA), and matches users against real criteria from Pakistani microfinance institutions and government programs.
-- **What This Isn't:** **Not a real bank, licensed lender, or payment processor.** All money movements, wallet transactions, and payout triggers are simulated internally for demo and evaluation purposes to connect users to real, existing institutions and schemes.
+<br>
 
----
+Built with the tools and technologies:  
+![React Native](https://img.shields.io/badge/React%20Native-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
+![Expo](https://img.shields.io/badge/Expo-000020?style=for-the-badge&logo=expo&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi)
+![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white)
+![JWT](https://img.shields.io/badge/JWT-black?style=for-the-badge&logo=JSON%20web%20tokens)
 
-## 🚦 Project Status
-
-- **Phase 1: Foundation + Phone/OTP Auth + Onboarding** — ✅ Complete & Verified
-- **Phase 2: Alternative Credit Scoring Engine** — ✅ Complete & Verified
-- **Phase 3: Digital Committee (ROSCA / BC System)** — ✅ Complete & Verified
-- **Phase 4: Micro-Loan Eligibility Matcher** — ✅ Complete & Verified
-- **Phase 5: Digital Wallet & Auto-Save Rules** — ✅ Complete & Verified
-- **Phase 6: Parametric Crop Insurance (Weather-Triggered)** — ✅ Complete & Verified
-- **Phase 7: Gov Subsidy & Scheme Bot (Kissan Card / BISP)** — ✅ Complete & Verified
-- **Phase 8: Gamified Financial Literacy (Urdu Modules & Quizzes)** — ✅ Complete & Verified
-- **Phase 9: Remittance Tracker & Savings Allocation** — ✅ Complete & Verified
-- **Phase 10: Final Polish & Comprehensive Review** — ⏳ Planned
+</div>
 
 ---
 
-## 🛠️ Tech Stack
+## 🧠 Project Summary
 
-| Layer | Choice | Why |
+**Sahoolat** gives unbanked and underbanked Pakistanis — small farmers, daily wage workers, first-time banking users, and remittance recipients — a single, Urdu-first entry point to financial tools that are normally scattered across eight separate, hard-to-access problems: credit assessment, group savings, microloan discovery, personal savings, crop insurance, government benefits, financial literacy, and remittance tracking.
+
+Sahoolat is a financial *access and awareness* layer, not a bank. It builds a transparent, fully explainable credit score from alternative data — land size, crop yield, utility payment consistency, savings committee participation, wallet activity — for people who have no formal credit history. It digitizes informal savings committees (BC/ROSCA), matches users against real criteria from actual Pakistani microfinance institutions and government schemes, and monitors real weather data to automatically trigger simulated crop insurance payouts.
+
+**What it isn't:** a licensed lender, a bank, or a payment processor. Every wallet transaction, committee contribution, and insurance payout in the app is simulated for demonstration — the credit methodology, loan/scheme eligibility criteria, and weather data behind those simulations are real and sourced from the actual institutions and APIs they reference.
+
+---
+
+## 👥 Who It's For
+
+| Persona | Situation | What Sahoolat Gives Them |
 |---|---|---|
-| **Frontend** | React Native (Expo) | Cross-platform, works on low-end Android devices, rapid iteration |
-| **Backend** | FastAPI (Python) | High performance, typed schemas, auto-generated OpenAPI docs |
-| **Database** | PostgreSQL (hosted on Neon) | Serverless Postgres, branch-based workflow, no local DB setup needed for the team |
-| **Auth** | Phone Number + OTP, JWT Sessions | Identifies target users by phone number rather than email |
-| **Icon System** | `@expo/vector-icons` (Ionicons filled set) | Consistent filled icons matching Design.md without external native dependencies |
-| **Weather API** | Open-Meteo API | Free, no API key required, powers the crop insurance trigger job |
-| **FX Rates** | exchangerate.host | Real-time exchange rates for remittance tracking |
-| **State Management** | Zustand + SecureStore | Lightweight state management with secure credential storage |
-| **Localization (i18n)** | react-i18next + JSON locales | Urdu-first design with full English support across app & API |
+| Rasheed, 42 — small farmer | 3 acres, no bank account, borrows informally at high rates | Credit score, loan matching, crop insurance |
+| Nasreen, 35 — daily wage laborer | Paid cash daily, no savings mechanism | Digital wallet, savings committee |
+| Bilal, 27 — shopkeeper | First-time banking user, has a smartphone | Financial literacy, savings tools |
+| Amma, 58 — remittance recipient | Receives money from an overseas relative | Remittance tracking, savings suggestions |
 
 ---
 
-## ✨ Features
+## 🚀 Features
 
-### Must-Have Features (Core Foundation & Financial Access)
-- **User Onboarding & Profile** — ✅ Built (Phone OTP auth, occupation selection, Urdu/English preference)
-- **Alternative Credit Scoring** — ✅ Built (Rule-based, explainable 0–100 score, factor breakdown, score history)
-- **Digital Committee (ROSCA / BC)** — ✅ Built (Group lifecycle, payout order assignment, contribution tracking, transparent audit log, live credit score signal integration)
-- **Micro-Loan Eligibility Matcher** — ✅ Built (Deterministic rule-based matching against Akhuwat, Kashf Foundation, and NRSP criteria with explainable reasoning & step-by-step application guidance)
+- 📊 **Alternative Credit Scoring**
+  Rule-based, fully explainable 0–100 score with a factor-by-factor breakdown and score history graph, built from land/crop data, utility payment consistency, committee participation, and savings behavior.
 
-### Should-Have Features (Personal Finance & Risk Protection)
-- **Digital Wallet** — ✅ Built (Manual income logging, percentage-based auto-save, savings balance tracking, 6-month income/savings trend chart, credit score savings signal integration)
-- **Parametric Crop Insurance** — ✅ Built (Policy creation tied to crop + district, daily weather-check job against Open-Meteo, automatic simulated payout on threshold breach, visible trigger log)
+- 🏦 **Micro-Loan Eligibility Matcher**
+  Ranked matches against real, sourced criteria from Akhuwat, Kashf Foundation, and NRSP, with required documents and application steps.
 
-### Nice-to-Have Features (Literacy & Social Support)
-- **Government Subsidy & Scheme Checker** — ✅ Built (Rule-based eligibility for Kissan Card and BISP/Benazir Kafaalat)
-- **Gamified Financial Literacy** — ✅ Built (Urdu-first lessons, quizzes, badges/streak tracking)
-- **Remittance Tracker** — ✅ Built (Remittance logging, trend view, FX context via exchangerate.host, cross-referenced savings suggestions)
+- 👛 **Digital Committee (ROSCA/BC)**
+  Create or join a rotating savings group, transparent contribution log visible to every member, automatic payout-order assignment (fixed or random draw, permanently recorded).
+
+- 💰 **Digital Wallet**
+  Manual income logging, percentage-based auto-save, multi-month earnings/savings trend.
+
+- 🌾 **Parametric Crop Insurance**
+  Policy tied to crop and district, monitored daily against live weather data (Open-Meteo), automatic simulated payout on threshold breach.
+
+- 🏛️ **Government Subsidy Checker**
+  Rule-based eligibility for Kissan Card and BISP/Benazir Kafaalat.
+
+- 🎮 **Gamified Financial Literacy**
+  Urdu-first lessons, quizzes, badges, and streaks.
+
+- 💸 **Remittance Tracker**
+  Logging, trend visualization, live FX context, cross-referenced savings suggestions.
+
+- 🔁 **Cross-Cutting Credit Feedback**
+  Every module feeds real activity back into the credit score — the score is not static, it reflects actual committee reliability and savings behavior as they happen.
+
+- 🔍 **Full Explainability**
+  Every automated decision (score, match, trigger, eligibility result) shows its reasoning — nothing is a black box.
+
+- 🌐 **Full Urdu & English Support**
+  Every screen, no exceptions.
 
 ---
 
-## ⚡ Quick Start
+## 🗃️ Project Structure
 
-**Windows cmd:**
+```bash
+backend/    # FastAPI REST API — models, migrations, rule engines, scheduled jobs, locale files
+app/        # React Native (Expo) mobile frontend — screens, navigation, state, theme, locale files
+Docs/       # Architecture, product requirements, design system, coding standards, and project history
+```
 
-```cmd
+---
+
+## 🔧 Setup & Installation
+
+> Make sure Python 3.8+ and Node.js are installed.
+
+### Backend
+
+```bash
+# Clone the repo
 git clone https://github.com/Muhammad-Ahmed-Rayyan/SAHOOLAT.git
-
 cd SAHOOLAT\backend
 
+# Create virtual environment
 python -m venv .venv
 .venv\Scripts\activate
 
+# Install dependencies
 pip install -r requirements.txt
 
+# Run migrations
 alembic upgrade head
 
+# Run the API
 uvicorn app.main:app --reload --host 0.0.0.0
 ```
-Frontend (:: in a second terminal):
-```cmd
+
+### Frontend
+
+```bash
 cd SAHOOLAT\app
-
 npm install
-
 npx expo start
 ```
 
-**macOS/Linux:**
-```bash
-git clone https://github.com/Muhammad-Ahmed-Rayyan/SAHOOLAT.git
+> The database is hosted on Neon — no local Postgres install needed, only shared team access. To test on a physical device via Expo Go, set `EXPO_PUBLIC_API_URL` in `app/.env` to your machine's LAN IP (not `localhost`), and run the backend with `--host 0.0.0.0` as shown above.
 
-cd SAHOOLAT/backend && python3 -m venv .venv && source .venv/bin/activate
+Full environment configuration, team database access, and troubleshooting: see [`SETUP.md`](./SETUP.md).
 
-pip install -r requirements.txt
+---
 
-alembic upgrade head
+## 🔑 API Configuration
 
-uvicorn app.main:app --reload --host 0.0.0.0
+Sahoolat relies on the following external data sources — no API key is required for either:
 
-# in a second terminal
-cd SAHOOLAT/app && npm install && npx expo start
+```.env
+WEATHER_API="Open-Meteo (free, no key required) — powers the crop insurance trigger job"
+FX_API="exchangerate.host — live exchange rates for remittance context"
 ```
 
-Database is hosted on Neon — no local Postgres install needed, just team access (see SETUP.md). Testing on a physical phone via Expo Go requires setting `EXPO_PUBLIC_API_URL` in `app/.env` to your machine's LAN IP, not `localhost`.
+---
 
-👉 **For full environment configuration, Neon team access, and troubleshooting, see [`SETUP.md`](./SETUP.md).**
+## 🧩 Design Principles
+
+- **Explainable over sophisticated** — every scoring, matching, and eligibility decision is rule-based, not machine learning, so its reasoning can always be shown to the user
+- **Urdu-first, not Urdu-only** — every screen fully supports both languages, with no hardcoded strings
+- **Built for low literacy and patchy connectivity** — icon-driven navigation, minimal dense text, and graceful fallback on every external API call
 
 ---
 
-## 📁 Project Structure
+<div align="center">
 
-- **`backend/`** — FastAPI REST API, SQLAlchemy models, Alembic migrations, rule engines, scheduled jobs (weather checks), and localization files.
-- **`app/`** — React Native (Expo) mobile frontend with Urdu-first theming, navigation, state stores, and screens.
-- **`Docs/`** — Architecture, product requirements (PRD), design tokens, coding standards, and the living project state tracker (`Memory.md`).
+⭐ Found this project useful? Drop a star on GitHub!
 
----
-
-## 📄 License
-
-MIT — see [`LICENSE`](./LICENSE).
+</div>
